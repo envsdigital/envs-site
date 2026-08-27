@@ -147,28 +147,33 @@ export default function Hero() {
           </Pill>
         </div>
 
-        <h1 className="h-display mx-auto mt-8 max-w-4xl text-[clamp(2.5rem,6.6vw,5.2rem)]">
+        <h1 className="h-display mx-auto mt-8 max-w-4xl text-[clamp(2.1rem,5.4vw,4.35rem)]">
           <span className="hero-in block" style={{ animationDelay: "0.3s" }}>
             Pare de contratar pessoas
           </span>
-          <span className="hero-in block" style={{ animationDelay: "0.48s" }}>
-            para fazer o que a{" "}
-            <span className="bg-gradient-to-r from-lime via-lime to-peri bg-clip-text text-transparent">
-              IA faz sozinha
-            </span>
+          <span className="hero-in block" style={{ animationDelay: "0.44s" }}>
+            para fazer o que a
+          </span>
+          {/* a frase em gradiente ganha linha própria: não quebra no meio e
+              fecha o headline com mais força */}
+          <span
+            className="hero-in block bg-gradient-to-r from-lime via-lime to-peri bg-clip-text text-transparent"
+            style={{ animationDelay: "0.58s" }}
+          >
+            IA faz sozinha
           </span>
         </h1>
 
         <p
           className="hero-in mx-auto mt-7 max-w-lg text-[15px] leading-relaxed text-fg/55"
-          style={{ animationDelay: "0.68s" }}
+          style={{ animationDelay: "0.74s" }}
         >
           {hero.sub}
         </p>
 
         <div
           className="hero-in mt-10 flex flex-wrap items-center justify-center gap-3"
-          style={{ animationDelay: "0.84s" }}
+          style={{ animationDelay: "0.88s" }}
         >
           <Glossy>
             {hero.cta}
@@ -179,13 +184,13 @@ export default function Hero() {
 
         <p
           className="hero-in mt-6 font-mono text-[11px] uppercase tracking-wider text-fg/35"
-          style={{ animationDelay: "0.98s" }}
+          style={{ animationDelay: "1.0s" }}
         >
           {hero.trust.join("  ·  ")}
         </p>
 
         {/* painel emergindo do brilho */}
-        <div className="hero-in mt-20" style={{ animationDelay: "1.15s" }}>
+        <div className="hero-in mt-20" style={{ animationDelay: "1.16s" }}>
           <AgentPanel />
         </div>
       </div>
