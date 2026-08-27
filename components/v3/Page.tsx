@@ -1,5 +1,6 @@
 import { SmoothScroll, Cursor } from "@/components/Chrome";
 import Hero from "@/components/v3/Hero";
+import Spotlight from "@/components/v3/Spotlight";
 import { Statement, Virada, Solucoes, Agentes, Dores, Metodo, Prova, Fecho } from "@/components/v3/Body";
 
 /** Composição da v3. Renderizada por / (versão vigente) e por /v3 (permalink). */
@@ -8,6 +9,7 @@ export default function V3Page() {
     <main style={{ fontFamily: "var(--font-inter), ui-sans-serif, system-ui, sans-serif" }}>
       <SmoothScroll />
       <Cursor />
+      <Spotlight />
       <div className="grain" />
       <Hero />
       <Statement />

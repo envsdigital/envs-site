@@ -9,6 +9,7 @@ import { depoimentos } from "@/data/depoimentos";
 import { caseDestaque } from "@/data/case";
 import { Reveal, Counter } from "@/lib/anim";
 import { Head, Bento, Orb, Glossy, Ghost, Pill, ArtGlow, ArtSliders, ArtSystems, ArtChart } from "./Kit";
+import Aurora from "./Aurora";
 
 const S = "mx-auto max-w-[1240px] px-5";
 
@@ -422,7 +423,7 @@ export function Prova() {
             <div>
               <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-lime">{c.eyebrow}</span>
               <h3 className="h-display mt-4 text-[clamp(1.5rem,3vw,2.3rem)]">
-                {c.title} <span className="text-lime">{c.titleHighlight}</span>
+                {c.title} <span className="glow-pulse text-lime">{c.titleHighlight}</span>
               </h3>
               <p className="mt-5 text-[13.5px] leading-relaxed text-fg/55">{c.paragraphs[1]}</p>
               <div className="mt-8 flex flex-wrap gap-3">
@@ -524,11 +525,18 @@ export function Fecho() {
         </Reveal>
       </section>
 
-      {/* CTA final com aurora */}
+      {/* CTA final: mesma aurora do hero, espelhada e mais baixa —
+          fecha o site com o mesmo motivo com que abriu */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="stars absolute inset-0 opacity-70" />
-          <div className="aurora" />
+        <div className="pointer-events-none absolute inset-0">
+          <Aurora junction={0.62} horizonAt={0.82} intensity={0.85} />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse 44% 40% at 50% 38%, rgba(13,13,13,0.7), transparent 74%)",
+            }}
+          />
         </div>
         <div className={`${S} relative py-32 text-center lg:py-40`}>
           <Pill>{finalCta.eyebrow}</Pill>

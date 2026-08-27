@@ -281,3 +281,54 @@ body {
   letter-spacing: -0.028em;
   line-height: 1.04;
 }
+
+/* spotlight que segue o cursor nos cards bento.
+   --mx/--my são setados por components/v3/Spotlight.tsx */
+.bento::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    340px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(191, 242, 78, 0.09),
+    rgba(144, 138, 255, 0.05) 38%,
+    transparent 62%
+  );
+}
+.bento:hover::after { opacity: 1; }
+
+/* borda que acende junto */
+.bento {
+  transition: border-color 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.bento:hover {
+  border-color: rgba(191, 242, 78, 0.28);
+  transform: translateY(-2px);
+}
+
+/* linha de luz varrendo o topo do card no hover */
+.bento::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  background: linear-gradient(90deg, transparent, rgba(191, 242, 78, 0.75), transparent);
+}
+.bento:hover::before { opacity: 1; }
+
+/* brilho pulsante lento — usado no número do case */
+@keyframes glowPulse {
+  0%, 100% { text-shadow: 0 0 34px rgba(191, 242, 78, 0.28); }
+  50%      { text-shadow: 0 0 60px rgba(191, 242, 78, 0.5); }
+}
+.glow-pulse { animation: glowPulse 5s ease-in-out infinite; }

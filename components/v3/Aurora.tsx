@@ -16,7 +16,18 @@ import { useEffect, useRef } from "react";
  * Substitui o vídeo MP4 que a referência usa: nítido em qualquer resolução,
  * sem bytes de vídeo, e ajustável por parâmetro.
  */
-export default function Aurora() {
+export default function Aurora({
+  junction = 0.42,
+  horizonAt = 0.63,
+  intensity = 1,
+}: {
+  /** onde o verde encontra o roxo (0 = esquerda, 1 = direita) */
+  junction?: number;
+  /** altura do arco dentro do canvas */
+  horizonAt?: number;
+  /** multiplicador geral de brilho */
+  intensity?: number;
+}) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -26,6 +37,14 @@ export default function Aurora() {
     if (!ctx) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // só anima enquanto estiver na tela — poupa bateria e deixa duas
+    // instâncias coexistirem sem custo
+    let visible = true;
+    const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting), {
+      rootMargin: "120px",
+    });
+    io.observe(canvas);
 
     // offscreen em meia resolução para as cortinas
     const off = document.createElement("canvas");
@@ -56,7 +75,7 @@ export default function Aurora() {
 
     // ponto onde o verde encontra o roxo — o "encontro das luzes".
     // É a referência para cor, altura do feixe, bloom e estouro do rim.
-    const JUNCTION = 0.42;
+    const JUNCTION = junction;
 
     // cor da cortina por posição horizontal: lime → branco-esverdeado → periwinkle
     const rayColor = (p: number) => {
@@ -82,6 +101,11 @@ export default function Aurora() {
 
     const draw = () => {
       if (!alive) return;
+      // fora da tela: mantém o loop vivo mas não pinta nada
+      if (!visible) {
+        raf = requestAnimationFrame(draw);
+        return;
+      }
       const t = reduce ? 6 : (performance.now() - start) / 1000;
 
       // entrada em duas camadas:
@@ -90,7 +114,7 @@ export default function Aurora() {
       const FADE = 2.2;
       const RISE = 3.0;
       const intro = reduce ? 1 : Math.min(1, t / FADE);
-      const ease = 1 - Math.pow(1 - intro, 3);
+      const ease = (1 - Math.pow(1 - intro, 3)) * intensity;
 
       const introRise = reduce ? 1 : Math.min(1, t / RISE);
       const easeRise = 1 - Math.pow(1 - introRise, 4);
@@ -99,7 +123,7 @@ export default function Aurora() {
 
       // geometria do planeta: só a calota superior aparece.
       // 0.63 do canvas (118vh) ≈ 74vh → o arco fica visível na primeira tela.
-      const horizon = h * (0.63 + riseFrac);
+      const horizon = h * (horizonAt + riseFrac);
       const R = w * 1.45;            // raio grande → curva suave
       const cx = w / 2;
       const cy = horizon + R;
@@ -121,7 +145,7 @@ export default function Aurora() {
       const ow = off.width, oh = off.height;
       octx.clearRect(0, 0, ow, oh);
       // as cortinas sobem junto com o planeta, senão a luz descola do arco
-      const oHorizon = oh * (0.63 + riseFrac);
+      const oHorizon = oh * (horizonAt + riseFrac);
 
       const N = 96;
       for (let i = 0; i < N; i++) {
@@ -249,9 +273,10 @@ export default function Aurora() {
     return () => {
       alive = false;
       cancelAnimationFrame(raf);
+      io.disconnect();
       window.removeEventListener("resize", resize);
     };
-  }, []);
+  }, [junction, horizonAt, intensity]);
 
   return <canvas ref={ref} className="absolute inset-0 h-full w-full" aria-hidden />;
 }
