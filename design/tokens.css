@@ -1,0 +1,47 @@
+/* envs — design tokens
+ * Source: Figma "Styleguide (Copy)" (file w7JotzS0Xf4vyuI8M5447A). Extracted 2026-08-27.
+ * Font "Loos Normal" is commercial and not bundled — see styleguide.md §2.
+ */
+
+:root {
+  /* ---- color (names match the Figma published styles) ---- */
+  --color-background: #191919;
+  --color-foreground: #ffffff;
+  --color-primary:    #bff24e; /* lime green */
+  --color-secondary:  #908aff; /* periwinkle */
+  --color-tertiary:   #f5f5f5; /* off-white — default logo & text fill */
+  --color-surface:    #292929; /* not a published style; dark frame bg seen in the guide */
+
+  /* ---- typography ---- */
+  --font-primary: "Loos Normal", "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-weight-regular: 400;
+  --letter-spacing: 0;
+
+  /* type scale: --fs-* = size, --lh-* = line-height (unitless).
+     The whole guide is weight 400. */
+  --fs-h1: 58px; --lh-h1: 1.2;
+  --fs-h2: 52px; --lh-h2: 1.2;
+  --fs-h3: 36px; --lh-h3: 1.2;
+  --fs-h4: 30px; --lh-h4: 1.4;
+  --fs-p-large: 28px; --lh-p-large: 1.5;
+  --fs-p: 18px; --lh-p: 1.6; --p-paragraph-spacing: 10px;
+  --fs-p-small: 16px; --lh-p-small: 1.6;
+}
+
+/* ---- ready-to-use element defaults (optional) ---- */
+body {
+  background: var(--color-background);
+  color: var(--color-tertiary);
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing);
+  font-size: var(--fs-p);
+  line-height: var(--lh-p);
+}
+h1 { font-size: var(--fs-h1); line-height: var(--lh-h1); font-weight: 400; }
+h2 { font-size: var(--fs-h2); line-height: var(--lh-h2); font-weight: 400; }
+h3 { font-size: var(--fs-h3); line-height: var(--lh-h3); font-weight: 400; }
+h4 { font-size: var(--fs-h4); line-height: var(--lh-h4); font-weight: 400; }
+p  { margin: 0 0 var(--p-paragraph-spacing); }
+.p-large { font-size: var(--fs-p-large); line-height: var(--lh-p-large); }
+.p-small { font-size: var(--fs-p-small); line-height: var(--lh-p-small); }
