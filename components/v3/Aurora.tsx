@@ -21,6 +21,7 @@ export default function Aurora({
   horizonAt = 0.63,
   intensity = 1,
   planet = true,
+  fadeTop = 0,
 }: {
   /** onde o verde encontra o roxo (0 = esquerda, 1 = direita) */
   junction?: number;
@@ -30,6 +31,12 @@ export default function Aurora({
   intensity?: number;
   /** false = só os feixes, sem a circunferência nem o rim light */
   planet?: boolean;
+  /**
+   * 0..1 — dissolve o topo do canvas nessa fração da altura.
+   * Sem isso, tudo (inclusive as estrelas) termina em corte reto na borda da
+   * seção e a divisa com a seção de cima fica evidente.
+   */
+  fadeTop?: number;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
@@ -296,5 +303,16 @@ export default function Aurora({
     };
   }, [junction, horizonAt, intensity, planet]);
 
-  return <canvas ref={ref} className="absolute inset-0 h-full w-full" aria-hidden />;
+  const mask = fadeTop
+    ? `linear-gradient(to bottom, transparent 0%, #000 ${Math.round(fadeTop * 100)}%)`
+    : undefined;
+
+  return (
+    <canvas
+      ref={ref}
+      className="absolute inset-0 h-full w-full"
+      style={mask ? { maskImage: mask, WebkitMaskImage: mask } : undefined}
+      aria-hidden
+    />
+  );
 }
