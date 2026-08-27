@@ -1,33 +1,22 @@
 import { SmoothScroll, Cursor } from "@/components/Chrome";
-import { Rail, Ticker, TopBar } from "@/components/v2/Shell";
-import Hero from "@/components/v2/Hero";
-import Virada from "@/components/v2/Virada";
-import Diferenca from "@/components/v2/Diferenca";
-import Futuro from "@/components/v2/Futuro";
-import Frentes from "@/components/v2/Frentes";
-import Dores from "@/components/v2/Dores";
-import Agentes from "@/components/v2/Agentes";
-import Metodo from "@/components/v2/Metodo";
-import Prova from "@/components/v2/Prova";
+import Hero from "@/components/v3/Hero";
+import { Statement, Virada, Solucoes, Agentes, Dores, Metodo, Prova, Fecho } from "@/components/v3/Body";
 
 export default function Page() {
   return (
-    <main className="pb-8 xl:pl-[92px]">
+    <main style={{ fontFamily: "var(--font-inter), ui-sans-serif, system-ui, sans-serif" }}>
       <SmoothScroll />
       <Cursor />
       <div className="grain" />
-      <Rail />
-      <TopBar />
       <Hero />
+      <Statement />
       <Virada />
-      <Diferenca />
-      <Futuro />
-      <Frentes />
-      <Dores />
+      <Solucoes />
       <Agentes />
+      <Dores />
       <Metodo />
       <Prova />
-      <Ticker />
+      <Fecho />
     </main>
   );
 }
