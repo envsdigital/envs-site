@@ -54,17 +54,21 @@ export default function Aurora() {
       tw: Math.random() * Math.PI * 2,
     }));
 
+    // ponto onde o verde encontra o roxo — o "encontro das luzes".
+    // É a referência para cor, altura do feixe, bloom e estouro do rim.
+    const JUNCTION = 0.42;
+
     // cor da cortina por posição horizontal: lime → branco-esverdeado → periwinkle
     const rayColor = (p: number) => {
-      if (p < 0.42) {
-        const k = p / 0.42;
+      if (p < JUNCTION) {
+        const k = p / JUNCTION;
         return [
           Math.round(191 + (232 - 191) * k),
           Math.round(242 + (255 - 242) * k),
           Math.round(78 + (200 - 78) * k),
         ];
       }
-      const k = (p - 0.42) / 0.58;
+      const k = (p - JUNCTION) / (1 - JUNCTION);
       return [
         Math.round(232 + (144 - 232) * k),
         Math.round(255 + (138 - 255) * k),
@@ -133,11 +137,14 @@ export default function Aurora() {
           0.62 +
           0.3 * Math.sin(i * 0.052 + t * 0.23) +
           0.18 * Math.sin(i * 0.121 - t * 0.15);
-        // mais intensa no centro (onde o rim estoura), como na referência
-        const center = 1 - Math.abs(p - 0.46) * 1.5;
+        // pico exatamente na junção das duas cores: é onde as luzes se fundem
+        // e onde nasce a sensação de grandeza. Gaussiana em vez de rampa linear
+        // → o pico fica definido e as laterais caem suaves.
+        const d = (p - JUNCTION) / 0.3;
+        const peak = Math.exp(-d * d);
         // as cortinas também crescem na entrada, não só clareiam
         const rayH =
-          oHorizon * Math.max(0.2, hv) * (0.7 + 0.6 * Math.max(0, center)) * (0.55 + 0.45 * ease);
+          oHorizon * Math.max(0.2, hv) * (0.58 + 1.15 * peak) * (0.55 + 0.45 * ease);
 
         const x = p * ow + sway * 0.5;
         const [r, g, b] = rayColor(p);
@@ -171,6 +178,25 @@ export default function Aurora() {
       ctx.drawImage(off, 0, 0, w, h);
       ctx.restore();
 
+      /* ---- 2b. bloom no encontro das duas luzes ---- */
+      // somado por cima das cortinas e ANTES do planeta, para o arco recortá-lo.
+      // É o que dá a escala: o ponto de fusão estoura em branco.
+      const bx = w * JUNCTION;
+      const by = horizon;
+      const br = Math.max(w, h) * 0.42;
+      const bloom = ctx.createRadialGradient(bx, by, 0, bx, by, br);
+      const pulse = 0.86 + 0.14 * Math.sin(t * 0.42);
+      bloom.addColorStop(0, `rgba(236,255,208,${0.3 * pulse})`);
+      bloom.addColorStop(0.28, `rgba(214,240,215,${0.14 * pulse})`);
+      bloom.addColorStop(0.62, `rgba(176,172,255,${0.05 * pulse})`);
+      bloom.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      ctx.globalAlpha = ease;
+      ctx.fillStyle = bloom;
+      ctx.fillRect(0, 0, w, h);
+      ctx.restore();
+
       /* ---- 3. planeta opaco: oclui as cortinas ao longo da curva ---- */
       ctx.save();
       ctx.beginPath();
@@ -186,12 +212,13 @@ export default function Aurora() {
       ctx.restore();
 
       /* ---- 4. rim light seguindo a curva ---- */
+      // o estouro branco do rim cai na mesma junção das cortinas
       const rim = ctx.createLinearGradient(0, 0, w, 0);
-      rim.addColorStop(0, "rgba(191,242,78,0.30)");
-      rim.addColorStop(0.3, "rgba(214,250,150,0.85)");
-      rim.addColorStop(0.47, "rgba(255,255,255,0.98)");
-      rim.addColorStop(0.66, "rgba(178,175,255,0.85)");
-      rim.addColorStop(1, "rgba(144,138,255,0.30)");
+      rim.addColorStop(0, "rgba(191,242,78,0.28)");
+      rim.addColorStop(JUNCTION - 0.16, "rgba(214,250,150,0.88)");
+      rim.addColorStop(JUNCTION, "rgba(255,255,255,1)");
+      rim.addColorStop(JUNCTION + 0.2, "rgba(178,175,255,0.86)");
+      rim.addColorStop(1, "rgba(144,138,255,0.28)");
 
       // halo largo
       ctx.save();
