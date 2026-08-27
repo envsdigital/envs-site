@@ -80,6 +80,12 @@ export default function Aurora() {
       if (!alive) return;
       const t = reduce ? 6 : (performance.now() - start) / 1000;
 
+      // entrada suave: a aurora acende em vez de aparecer de uma vez.
+      // easeOutCubic — sobe rápido no começo e assenta devagar.
+      const FADE = 2.2;
+      const intro = reduce ? 1 : Math.min(1, t / FADE);
+      const ease = 1 - Math.pow(1 - intro, 3);
+
       // geometria do planeta: só a calota superior aparece.
       // 0.63 do canvas (118vh) ≈ 74vh → o arco fica visível na primeira tela.
       const horizon = h * 0.63;
@@ -91,7 +97,7 @@ export default function Aurora() {
 
       /* ---- 1. estrelas ---- */
       for (const s of stars) {
-        const a = s.a * (0.62 + 0.38 * Math.sin(t * 0.7 + s.tw));
+        const a = s.a * (0.62 + 0.38 * Math.sin(t * 0.7 + s.tw)) * ease;
         ctx.globalAlpha = a;
         ctx.fillStyle = "#fff";
         ctx.beginPath();
@@ -121,7 +127,9 @@ export default function Aurora() {
           0.18 * Math.sin(i * 0.121 - t * 0.15);
         // mais intensa no centro (onde o rim estoura), como na referência
         const center = 1 - Math.abs(p - 0.46) * 1.5;
-        const rayH = oHorizon * Math.max(0.2, hv) * (0.7 + 0.6 * Math.max(0, center));
+        // as cortinas também crescem na entrada, não só clareiam
+        const rayH =
+          oHorizon * Math.max(0.2, hv) * (0.7 + 0.6 * Math.max(0, center)) * (0.55 + 0.45 * ease);
 
         const x = p * ow + sway * 0.5;
         const [r, g, b] = rayColor(p);
@@ -151,6 +159,7 @@ export default function Aurora() {
       ctx.save();
       ctx.filter = "blur(9px) saturate(1.25)";
       ctx.globalCompositeOperation = "lighter";
+      ctx.globalAlpha = ease;
       ctx.drawImage(off, 0, 0, w, h);
       ctx.restore();
 
@@ -181,6 +190,7 @@ export default function Aurora() {
       ctx.filter = "blur(13px)";
       ctx.strokeStyle = rim;
       ctx.lineWidth = 7;
+      ctx.globalAlpha = ease;
       ctx.beginPath();
       ctx.arc(cx, cy, R, Math.PI * 1.16, Math.PI * 1.84);
       ctx.stroke();
@@ -190,7 +200,7 @@ export default function Aurora() {
       ctx.save();
       ctx.strokeStyle = rim;
       ctx.lineWidth = 1.15;
-      ctx.globalAlpha = 0.92;
+      ctx.globalAlpha = 0.92 * ease;
       ctx.beginPath();
       ctx.arc(cx, cy, R, Math.PI * 1.16, Math.PI * 1.84);
       ctx.stroke();
