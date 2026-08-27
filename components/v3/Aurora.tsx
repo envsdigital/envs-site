@@ -127,18 +127,24 @@ export default function Aurora() {
         const [r, g, b] = rayColor(p);
 
         // brilho de cada cortina oscila individualmente
-        const flick = 0.72 + 0.28 * Math.sin(t * 0.5 + i * 0.63);
+        const flick = 0.8 + 0.2 * Math.sin(t * 0.5 + i * 0.63);
 
-        const grad = octx.createLinearGradient(0, oHorizon - rayH, 0, oHorizon + oh * 0.05);
+        // base das cortinas abaixo do horizonte: a luz nasce de mais fundo,
+        // atrás do arco, e o brilho encosta na borda do planeta
+        const baseDrop = oh * 0.075;
+        const top = oHorizon - rayH + baseDrop;
+        const bottom = oHorizon + oh * 0.05 + baseDrop;
+
+        const grad = octx.createLinearGradient(0, top, 0, bottom);
         grad.addColorStop(0, `rgba(${r},${g},${b},0)`);
-        grad.addColorStop(0.5, `rgba(${r},${g},${b},${0.28 * flick})`);
+        grad.addColorStop(0.45, `rgba(${r},${g},${b},${0.42 * flick})`);
         grad.addColorStop(1, `rgba(${r},${g},${b},${1.0 * flick})`);
 
         octx.fillStyle = grad;
         // largura MENOR que o espaçamento → sobra vão escuro entre as cortinas,
         // que é o que faz ler como estria de aurora e não como mancha
-        const bw = (ow / N) * 0.44;
-        octx.fillRect(x - bw / 2, oHorizon - rayH, bw, rayH + oh * 0.05);
+        const bw = (ow / N) * 0.5;
+        octx.fillRect(x - bw / 2, top, bw, bottom - top);
       }
 
       // ampliar com blur: o upscale + filtro é o que "derrete" as faixas em aurora
