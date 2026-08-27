@@ -131,7 +131,7 @@ export default function Aurora() {
 
         // base das cortinas abaixo do horizonte: a luz nasce de mais fundo,
         // atrás do arco, e o brilho encosta na borda do planeta
-        const baseDrop = oh * 0.075;
+        const baseDrop = oh * 0.1;
         const top = oHorizon - rayH + baseDrop;
         const bottom = oHorizon + oh * 0.05 + baseDrop;
 
@@ -143,7 +143,7 @@ export default function Aurora() {
         octx.fillStyle = grad;
         // largura MENOR que o espaçamento → sobra vão escuro entre as cortinas,
         // que é o que faz ler como estria de aurora e não como mancha
-        const bw = (ow / N) * 0.5;
+        const bw = (ow / N) * 0.44;
         octx.fillRect(x - bw / 2, top, bw, bottom - top);
       }
 
