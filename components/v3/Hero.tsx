@@ -15,7 +15,10 @@ const NAV = [
 function Nav() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-5 py-5">
-      <div className="mx-auto flex max-w-[1240px] items-center justify-between">
+      <div
+        className="hero-in mx-auto flex max-w-[1240px] items-center justify-between"
+        style={{ animationDelay: "0.05s" }}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <a href="#top" aria-label="envs">
           <img src="/logos/envs-wordmark.svg" alt="envs" className="h-[18px] w-auto" />
@@ -136,23 +139,37 @@ export default function Hero() {
       </div>
 
       <div className="relative mx-auto max-w-[1240px] px-5 pt-36 text-center">
-        <Pill>
-          <span className="pulsedot h-1.5 w-1.5 rounded-full bg-lime" />
-          {hero.eyebrow}
-        </Pill>
+        {/* cada bloco entra um pouco depois do anterior, acompanhando a aurora */}
+        <div className="hero-in" style={{ animationDelay: "0.15s" }}>
+          <Pill>
+            <span className="pulsedot h-1.5 w-1.5 rounded-full bg-lime" />
+            {hero.eyebrow}
+          </Pill>
+        </div>
 
         <h1 className="h-display mx-auto mt-8 max-w-4xl text-[clamp(2.5rem,6.6vw,5.2rem)]">
-          Pare de contratar pessoas
-          <br />
-          para fazer o que a{" "}
-          <span className="bg-gradient-to-r from-lime via-lime to-peri bg-clip-text text-transparent">
-            IA faz sozinha
+          <span className="hero-in block" style={{ animationDelay: "0.3s" }}>
+            Pare de contratar pessoas
+          </span>
+          <span className="hero-in block" style={{ animationDelay: "0.48s" }}>
+            para fazer o que a{" "}
+            <span className="bg-gradient-to-r from-lime via-lime to-peri bg-clip-text text-transparent">
+              IA faz sozinha
+            </span>
           </span>
         </h1>
 
-        <p className="mx-auto mt-7 max-w-lg text-[15px] leading-relaxed text-fg/55">{hero.sub}</p>
+        <p
+          className="hero-in mx-auto mt-7 max-w-lg text-[15px] leading-relaxed text-fg/55"
+          style={{ animationDelay: "0.68s" }}
+        >
+          {hero.sub}
+        </p>
 
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+        <div
+          className="hero-in mt-10 flex flex-wrap items-center justify-center gap-3"
+          style={{ animationDelay: "0.84s" }}
+        >
           <Glossy>
             {hero.cta}
             <span>→</span>
@@ -160,12 +177,15 @@ export default function Hero() {
           <Ghost href="#virada">Ver como funciona</Ghost>
         </div>
 
-        <p className="mt-6 font-mono text-[11px] uppercase tracking-wider text-fg/35">
+        <p
+          className="hero-in mt-6 font-mono text-[11px] uppercase tracking-wider text-fg/35"
+          style={{ animationDelay: "0.98s" }}
+        >
           {hero.trust.join("  ·  ")}
         </p>
 
         {/* painel emergindo do brilho */}
-        <div className="mt-20">
+        <div className="hero-in mt-20" style={{ animationDelay: "1.15s" }}>
           <AgentPanel />
         </div>
       </div>
