@@ -541,8 +541,9 @@ export function Fecho() {
         <div className={`${S} relative py-32 text-center lg:py-40`}>
           <Pill>{finalCta.eyebrow}</Pill>
           <h2 className="h-display mx-auto mt-8 max-w-3xl text-[clamp(2.1rem,5.4vw,4.2rem)]">
-            {finalCta.title.slice(0, -1).join(" ")}{" "}
-            <span className="bg-gradient-to-r from-lime to-peri bg-clip-text text-transparent">
+            {finalCta.title.slice(0, -1).join(" ")}
+            {/* a pergunta ganha linha própria: não quebra no meio, como no hero */}
+            <span className="block bg-gradient-to-r from-lime to-peri bg-clip-text text-transparent">
               {finalCta.title[finalCta.title.length - 1]}
             </span>
           </h2>

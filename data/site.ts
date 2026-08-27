@@ -14,12 +14,12 @@ export const hero = {
 };
 
 export const virada = {
-  eyebrow: "2026: A VIRADA",
-  title: ["Se 2024 foi o ano do chat,", "2026 é o ano da IA que executa."],
+  eyebrow: "A VIRADA",
+  title: ["A IA parou de responder.", "Começou a executar."],
   lead: "A maioria das empresas brasileiras ainda está presa no chatbot. O que está emergindo agora é outra coisa — e quem não perceber isso vai pagar caro.",
   cards: [
     {
-      period: "2023 — 2024",
+      period: "PRIMEIRA ONDA",
       title: "IA que Responde",
       desc: "ChatGPT, chatbots, funil com IA, WhatsApp automático. A IA como canal de comunicação.",
       items: ["Chatbot de atendimento", "Automação de WhatsApp", "Funil com IA"],
@@ -27,7 +27,7 @@ export const virada = {
       now: false,
     },
     {
-      period: "2025",
+      period: "SEGUNDA ONDA",
       title: "IA que Automatiza",
       desc: "Zapier, Make, n8n. Fluxos conectados. A IA como middleware entre sistemas.",
       items: ["Sequências pré-definidas", "Integração entre APIs", "Gatilhos e condições fixas"],
@@ -35,7 +35,7 @@ export const virada = {
       now: false,
     },
     {
-      period: "2026 — AGORA",
+      period: "TERCEIRA ONDA — AGORA",
       title: "IA que Executa",
       desc: "Agentes autônomos que observam, decidem e agem — como um humano, mas sem parar.",
       items: ["Opera softwares e sistemas", "Toma decisões com contexto", "Adapta o comportamento"],
@@ -67,7 +67,7 @@ export const diferenca = {
   verbs: ["Observa", "Decide", "Executa", "Aprende"],
   systems: ["Planilhas", "Documentos", "Softwares", "APIs", "qualquer sistema"],
   fecho:
-    "Ignorar agentes autônomos em 2026 é o equivalente a ignorar a internet em 2005. A pergunta não é se isso vai afetar o seu negócio. É se você vai estar na frente ou atrás.",
+    "Ignorar agentes autônomos hoje é o equivalente a ignorar a internet em 2005. A pergunta não é se isso vai afetar o seu negócio. É se você vai estar na frente ou atrás.",
   cta: "Quero estar na frente",
   provaTitle: "Mais de 5 anos construindo software para quem não pode parar.",
   setores: ["Educação", "Telecomunicações", "Marketing Digital", "E-commerce", "SaaS"],
@@ -94,7 +94,7 @@ export const futuro = {
       desc: "Surgiu a assessoria de tráfego, a agência de conteúdo. Quem não anunciou perdeu mercado.",
     },
     {
-      era: "2025 EM DIANTE",
+      era: "AGORA",
       title: "Toda empresa vai precisar de IA na operação.",
       desc: "Surgiu o parceiro de operação com IA. Quem não automatizar os processos vai ser engolido por quem automatizou.",
     },
@@ -381,7 +381,7 @@ export const garantiaFinal = {
 
 export const finalCta = {
   eyebrow: "PRONTO PARA NÃO FICAR PARA TRÁS?",
-  title: ["Toda empresa vai precisar de", "um parceiro de tech com IA.", "A sua já tem?"],
+  title: ["Seus processos já podiam estar", "rodando sozinhos.", "Por que ainda não estão?"],
   lead: "Uma call de 30 minutos para entender sua operação e mostrar onde os agentes de IA geram resultado imediato.",
   primary: "Agendar call gratuita agora",
   secondary: "Ver a tese completa",

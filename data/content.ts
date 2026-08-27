@@ -76,7 +76,7 @@ export const defaultContent = {
     dores: { label: "o diagnóstico" },
     metodo: { label: "por que a maioria falha" },
     futuro: { label: "o futuro chegou" },
-    virada: { label: "2026: a virada" },
+    virada: { label: "a virada" },
   },
 };
 
