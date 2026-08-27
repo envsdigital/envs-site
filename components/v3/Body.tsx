@@ -529,7 +529,7 @@ export function Fecho() {
           fecha o site com o mesmo motivo com que abriu */}
       <section className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0">
-          <Aurora junction={0.62} horizonAt={0.82} intensity={0.85} />
+          <Aurora junction={0.62} horizonAt={0.96} intensity={0.9} planet={false} />
           <div
             className="absolute inset-0"
             style={{

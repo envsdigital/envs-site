@@ -20,13 +20,16 @@ export default function Aurora({
   junction = 0.42,
   horizonAt = 0.63,
   intensity = 1,
+  planet = true,
 }: {
   /** onde o verde encontra o roxo (0 = esquerda, 1 = direita) */
   junction?: number;
-  /** altura do arco dentro do canvas */
+  /** altura do arco (ou da base dos feixes, sem planeta) dentro do canvas */
   horizonAt?: number;
   /** multiplicador geral de brilho */
   intensity?: number;
+  /** false = só os feixes, sem a circunferência nem o rim light */
+  planet?: boolean;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
@@ -184,8 +187,17 @@ export default function Aurora({
 
         const grad = octx.createLinearGradient(0, top, 0, bottom);
         grad.addColorStop(0, `rgba(${r},${g},${b},0)`);
-        grad.addColorStop(0.45, `rgba(${r},${g},${b},${0.42 * flick})`);
-        grad.addColorStop(1, `rgba(${r},${g},${b},${1.0 * flick})`);
+        if (planet) {
+          // o planeta corta a base, então ela pode terminar cheia
+          grad.addColorStop(0.45, `rgba(${r},${g},${b},${0.42 * flick})`);
+          grad.addColorStop(1, `rgba(${r},${g},${b},${1.0 * flick})`);
+        } else {
+          // sem planeta não há o que cortar: a cortina precisa apagar sozinha
+          // embaixo, senão fica com corte reto no ar
+          grad.addColorStop(0.4, `rgba(${r},${g},${b},${0.4 * flick})`);
+          grad.addColorStop(0.82, `rgba(${r},${g},${b},${0.95 * flick})`);
+          grad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+        }
 
         octx.fillStyle = grad;
         // largura MENOR que o espaçamento → sobra vão escuro entre as cortinas,
@@ -209,7 +221,7 @@ export default function Aurora({
       const by = horizon;
       const br = Math.max(w, h) * 0.42;
       const bloom = ctx.createRadialGradient(bx, by, 0, bx, by, br);
-      const pulse = 0.86 + 0.14 * Math.sin(t * 0.42);
+      const pulse = (0.86 + 0.14 * Math.sin(t * 0.42)) * (planet ? 1 : 0.55);
       bloom.addColorStop(0, `rgba(236,255,208,${0.3 * pulse})`);
       bloom.addColorStop(0.28, `rgba(214,240,215,${0.14 * pulse})`);
       bloom.addColorStop(0.62, `rgba(176,172,255,${0.05 * pulse})`);
@@ -220,6 +232,12 @@ export default function Aurora({
       ctx.fillStyle = bloom;
       ctx.fillRect(0, 0, w, h);
       ctx.restore();
+
+      // sem planeta, o desenho termina aqui: só estrelas, cortinas e bloom
+      if (!planet) {
+        if (!reduce) raf = requestAnimationFrame(draw);
+        return;
+      }
 
       /* ---- 3. planeta opaco: oclui as cortinas ao longo da curva ---- */
       ctx.save();
@@ -276,7 +294,7 @@ export default function Aurora({
       io.disconnect();
       window.removeEventListener("resize", resize);
     };
-  }, [junction, horizonAt, intensity]);
+  }, [junction, horizonAt, intensity, planet]);
 
   return <canvas ref={ref} className="absolute inset-0 h-full w-full" aria-hidden />;
 }
