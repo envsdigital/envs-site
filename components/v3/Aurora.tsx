@@ -80,15 +80,22 @@ export default function Aurora() {
       if (!alive) return;
       const t = reduce ? 6 : (performance.now() - start) / 1000;
 
-      // entrada suave: a aurora acende em vez de aparecer de uma vez.
-      // easeOutCubic — sobe rápido no começo e assenta devagar.
+      // entrada em duas camadas:
+      //  · brilho — easeOutCubic, 2.2s
+      //  · subida do planeta — easeOutQuart, 3.0s, para assentar DEPOIS da luz
       const FADE = 2.2;
+      const RISE = 3.0;
       const intro = reduce ? 1 : Math.min(1, t / FADE);
       const ease = 1 - Math.pow(1 - intro, 3);
 
+      const introRise = reduce ? 1 : Math.min(1, t / RISE);
+      const easeRise = 1 - Math.pow(1 - introRise, 4);
+      // começa 17% mais baixo e sobe até a posição final
+      const riseFrac = (1 - easeRise) * 0.17;
+
       // geometria do planeta: só a calota superior aparece.
       // 0.63 do canvas (118vh) ≈ 74vh → o arco fica visível na primeira tela.
-      const horizon = h * 0.63;
+      const horizon = h * (0.63 + riseFrac);
       const R = w * 1.45;            // raio grande → curva suave
       const cx = w / 2;
       const cy = horizon + R;
@@ -109,7 +116,8 @@ export default function Aurora() {
       /* ---- 2. cortinas de luz (offscreen, meia resolução) ---- */
       const ow = off.width, oh = off.height;
       octx.clearRect(0, 0, ow, oh);
-      const oHorizon = oh * 0.63;
+      // as cortinas sobem junto com o planeta, senão a luz descola do arco
+      const oHorizon = oh * (0.63 + riseFrac);
 
       const N = 96;
       for (let i = 0; i < N; i++) {
