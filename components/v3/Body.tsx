@@ -1,28 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import {
-  virada, diferenca, futuro, frentes, stack, dores, agentes,
-  visibilidade, falha, stats, escritorio, garantiaFinal, finalCta,
-} from "@/data/site";
-import { depoimentos } from "@/data/depoimentos";
-import { caseDestaque } from "@/data/case";
 import { Reveal, Counter } from "@/lib/anim";
 import { Head, Bento, Orb, Glossy, Ghost, Pill, ArtGlow, ArtSliders, ArtSystems, ArtChart } from "./Kit";
 import Aurora from "./Aurora";
+import { useContent } from "./Content";
 
 const S = "mx-auto max-w-[1240px] px-5";
 
 /* ---------- 01 · declaração + esfera ---------- */
 export function Statement() {
+  const { diferenca, orbLabels, statement } = useContent();
   return (
     <section className={`${S} py-28 lg:py-36`}>
       <div className="grid items-center gap-14 lg:grid-cols-[1.3fr_1fr]">
         <Reveal>
           <p className="h-display text-[clamp(1.5rem,3.1vw,2.5rem)] leading-[1.22]">
-            A envs coloca <span className="text-lime">agentes de IA para operar</span> seu financeiro,
-            jurídico, comercial e logística — integra os sistemas que você já usa e continua do seu
-            lado enquanto o negócio cresce.
+            {statement.lead} <span className="text-lime">{statement.highlight}</span> {statement.rest}
           </p>
           <div className="mt-10 flex flex-wrap gap-2.5">
             {diferenca.setores.map((s) => (
@@ -31,21 +25,21 @@ export function Statement() {
           </div>
         </Reveal>
         <Reveal delay={0.15} className="flex justify-center lg:justify-end">
-          <Orb labels={hero4} size={300} />
+          <Orb labels={orbLabels} size={300} />
         </Reveal>
       </div>
     </section>
   );
 }
-const hero4 = ["Financeiro", "Jurídico", "Comercial", "Logística"];
 
 /* ---------- 02 · a virada ---------- */
 export function Virada() {
+  const { virada, diferenca, heads } = useContent();
   return (
     <section className={`${S} py-20`}>
       <Head
         id="virada"
-        label="2026: a virada"
+        label={heads.virada.label}
         title={
           <>
             Se 2024 foi o ano do chat,{" "}
@@ -96,13 +90,14 @@ export function Virada() {
 
 /* ---------- 03 · o que nos diferencia (bento) ---------- */
 export function Solucoes() {
+  const { frentes, stack, heads, integraTitle, integraDesc, integraItems } = useContent();
   return (
     <section className={`${S} py-20`}>
       <Head
         id="solucoes"
-        label="o que nos diferencia"
-        title="O que separa a envs de quem só “faz automação”"
-        desc="Automação segue regras fixas. Agente autônomo observa, decide e adapta."
+        label={heads.solucoes.label}
+        title={heads.solucoes.title}
+        desc={heads.solucoes.desc}
       />
       <div className="mt-14 grid gap-4 md:grid-cols-2">
         <Reveal>
@@ -164,9 +159,9 @@ export function Solucoes() {
         </Reveal>
         <Reveal delay={0.08}>
           <Bento
-            title="Integra o que você já usa"
-            desc="Planilhas, documentos, softwares, APIs — qualquer sistema. Sem trocar sua stack."
-            art={<ArtSystems items={["ERP", "CRM", "Banco", "NF-e", "Sheets", "Slack", "E-mail", "APIs"]} />}
+            title={integraTitle}
+            desc={integraDesc}
+            art={<ArtSystems items={integraItems} />}
             className="h-full"
           />
         </Reveal>
@@ -208,14 +203,15 @@ export function Solucoes() {
 
 /* ---------- 04 · agentes (rail lateral estilo cosmoq) ---------- */
 export function Agentes() {
+  const { agentes, visibilidade, heads } = useContent();
   const [i, setI] = useState(0);
   const t = agentes.tabs[i];
   return (
     <section className={`${S} py-20`}>
       <Head
         id="agentes"
-        label="os agentes na prática"
-        title="Da IA que responde para a IA que executa"
+        label={heads.agentes.label}
+        title={heads.agentes.title}
         desc={agentes.lead}
       />
       <div className="mt-14 grid gap-8 lg:grid-cols-[240px_1fr]">
@@ -315,9 +311,10 @@ export function Agentes() {
 
 /* ---------- 05 · diagnóstico ---------- */
 export function Dores() {
+  const { dores, heads } = useContent();
   return (
     <section className={`${S} py-20`}>
-      <Head id="dores" label="o diagnóstico" title={dores.title} />
+      <Head id="dores" label={heads.dores.label} title={dores.title} />
       <div className="mt-12 grid gap-4 md:grid-cols-2">
         {dores.items.map((d, i) => (
           <Reveal key={d.title} delay={i * 0.04}>
@@ -338,12 +335,13 @@ export function Dores() {
 
 /* ---------- 06 · método ---------- */
 export function Metodo() {
+  const { falha, heads } = useContent();
   const f = falha;
   return (
     <section className={`${S} py-20`}>
       <Head
         id="metodo"
-        label="por que a maioria falha"
+        label={heads.metodo.label}
         title={<>{f.title[0]} <span className="text-lime">{f.title[1]}</span></>}
         desc={f.lead}
       />
@@ -397,10 +395,11 @@ export function Metodo() {
 
 /* ---------- 07 · prova ---------- */
 export function Prova() {
+  const { stats, depoimentos, caseDestaque, heads } = useContent();
   const c = caseDestaque;
   return (
     <section className={`${S} py-20`}>
-      <Head id="prova" label="resultados" title="Não são palavras. São números de quem já fez." />
+      <Head id="prova" label={heads.prova.label} title={heads.prova.title} />
 
       <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.items.map((s, i) => (
@@ -466,10 +465,11 @@ export function Prova() {
 
 /* ---------- 08 · futuro + garantia + CTA ---------- */
 export function Fecho() {
+  const { futuro, escritorio, garantiaFinal, finalCta, WA_URL, heads } = useContent();
   return (
     <>
       <section className={`${S} py-20`}>
-        <Head label="o futuro chegou" title={futuro.title} />
+        <Head label={heads.futuro.label} title={futuro.title} />
         <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="space-y-5 text-[14px] leading-relaxed text-fg/55">
             <p>{futuro.paragraphs[0]}</p>

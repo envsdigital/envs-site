@@ -1,18 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { hero, WA_URL } from "@/data/site";
+import { useContent } from "./Content";
 import { Glossy, Ghost, Pill } from "./Kit";
 import Aurora from "./Aurora";
 
-const NAV = [
-  { label: "A virada", href: "#virada" },
-  { label: "Soluções", href: "#solucoes" },
-  { label: "Método", href: "#metodo" },
-  { label: "Resultados", href: "#prova" },
-];
-
 function Nav() {
+  const { WA_URL, nav } = useContent();
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-5 py-5">
       <div
@@ -25,7 +19,7 @@ function Nav() {
         </a>
 
         <nav className="glass-pill hidden items-center gap-1 px-2 py-1.5 md:flex">
-          {NAV.map((n) => (
+          {nav.map((n) => (
             <a
               key={n.href}
               href={n.href}
@@ -51,13 +45,9 @@ function Nav() {
 
 /** Painel do agente que aparece "sobre" o horizonte da aurora. */
 function AgentPanel() {
+  const { heroPanel } = useContent();
   const [n, setN] = useState(0);
-  const rows = [
-    { label: "Inadimplência identificada", value: "12 faturas", tone: "lime" },
-    { label: "Cruzamento com CRM", value: "3 em risco", tone: "peri" },
-    { label: "Régua de cobrança", value: "disparada", tone: "lime" },
-    { label: "Conciliação bancária", value: "concluída", tone: "lime" },
-  ];
+  const rows = heroPanel.rows;
 
   useEffect(() => {
     const t = setInterval(() => setN((v) => (v + 1) % (rows.length + 1)), 900);
@@ -70,10 +60,10 @@ function AgentPanel() {
       <div className="flex items-center gap-3 border-b border-white/8 px-5 py-3.5">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logos/envs-bubble-primary.svg" alt="" className="h-4 w-4" />
-        <span className="text-[13px] font-medium text-fg/85">Agente Financeiro</span>
+        <span className="text-[13px] font-medium text-fg/85">{heroPanel.title}</span>
         <span className="ml-auto flex items-center gap-1.5 rounded-full border border-lime/30 bg-lime/10 px-2.5 py-1 font-mono text-[10px] text-lime">
           <span className="pulsedot h-1.5 w-1.5 rounded-full bg-lime" />
-          rodando
+          {heroPanel.badge}
         </span>
       </div>
 
@@ -102,12 +92,7 @@ function AgentPanel() {
 
         {/* métricas */}
         <div className="grid grid-cols-2 gap-3">
-          {[
-            { k: "Processos", v: "24h", s: "sem parar" },
-            { k: "Intervenção", v: "0", s: "humana" },
-            { k: "Sistemas", v: "6", s: "integrados" },
-            { k: "Exceções", v: "1", s: "tratada" },
-          ].map((m) => (
+          {heroPanel.metrics.map((m) => (
             <div key={m.k} className="rounded-lg border border-white/8 bg-white/[0.025] p-4">
               <p className="font-mono text-[10px] uppercase tracking-wider text-fg/35">{m.k}</p>
               <p className="mt-1.5 text-2xl font-medium text-lime">{m.v}</p>
@@ -121,6 +106,7 @@ function AgentPanel() {
 }
 
 export default function Hero() {
+  const { hero } = useContent();
   return (
     <section id="top" className="relative overflow-hidden">
       {/* fundo: aurora sobre o limbo do planeta (canvas animado) */}
@@ -148,20 +134,23 @@ export default function Hero() {
         </div>
 
         <h1 className="h-display mx-auto mt-8 max-w-4xl text-[clamp(2.1rem,5.4vw,4.35rem)]">
-          <span className="hero-in block" style={{ animationDelay: "0.3s" }}>
-            Pare de contratar pessoas
-          </span>
-          <span className="hero-in block" style={{ animationDelay: "0.44s" }}>
-            para fazer o que a
-          </span>
-          {/* a frase em gradiente ganha linha própria: não quebra no meio e
-              fecha o headline com mais força */}
-          <span
-            className="hero-in block bg-gradient-to-r from-lime via-lime to-peri bg-clip-text text-transparent"
-            style={{ animationDelay: "0.58s" }}
-          >
-            IA faz sozinha
-          </span>
+          {/* uma linha por item; a última entra em gradiente e fecha o headline */}
+          {hero.headline.map((line, i) => {
+            const last = i === hero.headline.length - 1;
+            return (
+              <span
+                key={i}
+                className={
+                  last
+                    ? "hero-in block bg-gradient-to-r from-lime via-lime to-peri bg-clip-text text-transparent"
+                    : "hero-in block"
+                }
+                style={{ animationDelay: `${0.3 + i * 0.14}s` }}
+              >
+                {line}
+              </span>
+            );
+          })}
         </h1>
 
         <p

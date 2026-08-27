@@ -6,7 +6,7 @@ export const WA_URL =
 export const hero = {
   eyebrow: "AUTOMAÇÃO INTELIGENTE PARA EMPRESAS QUE QUEREM CRESCER",
   // última linha em verde
-  headline: ["Pare de contratar", "pessoas", "para fazer o que a", "IA pode fazer sozinha."],
+  headline: ["Pare de contratar pessoas", "para fazer o que a", "IA faz sozinha"],
   sub: "Financeiro, jurídico, comercial, logística. Todos os seus processos inteiros podem rodar sem intervenção humana.",
   cta: "Quero automatizar com a envs",
   trust: ["Sem compromisso", "Call de 30 min", "Resultado em semanas"],
