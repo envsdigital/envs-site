@@ -127,12 +127,12 @@ export default function Aurora() {
         const [r, g, b] = rayColor(p);
 
         // brilho de cada cortina oscila individualmente
-        const flick = 0.62 + 0.38 * Math.sin(t * 0.5 + i * 0.63);
+        const flick = 0.72 + 0.28 * Math.sin(t * 0.5 + i * 0.63);
 
         const grad = octx.createLinearGradient(0, oHorizon - rayH, 0, oHorizon + oh * 0.05);
         grad.addColorStop(0, `rgba(${r},${g},${b},0)`);
-        grad.addColorStop(0.5, `rgba(${r},${g},${b},${0.16 * flick})`);
-        grad.addColorStop(1, `rgba(${r},${g},${b},${0.72 * flick})`);
+        grad.addColorStop(0.5, `rgba(${r},${g},${b},${0.28 * flick})`);
+        grad.addColorStop(1, `rgba(${r},${g},${b},${1.0 * flick})`);
 
         octx.fillStyle = grad;
         // largura MENOR que o espaçamento → sobra vão escuro entre as cortinas,
