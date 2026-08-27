@@ -47,29 +47,36 @@ function Caption({
 /**
  * Tipo gigante que atravessa a tela conforme o scroll.
  * `drift` desloca no eixo x (positivo = entra pela esquerda e sai pela
- * direita), o que produz o efeito de passar pela câmera.
+ * direita) e `depth` escala junto, o que faz o texto passar pela câmera em
+ * vez de só deslizar. É o que dá a sensação de estar dentro da cena.
  */
 function Huge({
   children,
   align = "left",
   drift = 0,
+  depth = 0,
   className = "",
 }: {
   children: React.ReactNode;
   align?: "left" | "right" | "center";
   drift?: number;
+  depth?: number;
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || !drift) return;
+    if (!el || (!drift && !depth)) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     const tw = gsap.fromTo(
       el,
-      { xPercent: -drift },
+      { xPercent: -drift, scale: 1 - depth, opacity: depth ? 0.45 : 1 },
       {
         xPercent: drift,
+        scale: 1 + depth,
+        opacity: 1,
         ease: "none",
         scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 0.6 },
       }
@@ -78,7 +85,7 @@ function Huge({
       tw.scrollTrigger?.kill();
       tw.kill();
     };
-  }, [drift]);
+  }, [drift, depth]);
 
   const a = align === "right" ? "text-right" : align === "center" ? "text-center" : "text-left";
 
@@ -92,11 +99,54 @@ function Huge({
   );
 }
 
+/**
+ * Contador que sobe quando entra na tela — o "(483)" da referência.
+ * Fica sobrescrito ao lado do título, em peri.
+ */
+function Counter({ to, prefix = "", suffix = "" }: { to: number; prefix?: string; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      el.textContent = `${prefix}${to}${suffix}`;
+      return;
+    }
+    const box = { v: 0 };
+    const tw = gsap.to(box, {
+      v: to,
+      duration: 1.5,
+      ease: "power2.out",
+      // décimos só se o alvo tiver, senão vira "12.0"
+      onUpdate: () => {
+        const n = Number.isInteger(to) ? Math.round(box.v) : box.v.toFixed(1);
+        el.textContent = `${prefix}${n}${suffix}`;
+      },
+      scrollTrigger: { trigger: el, start: "top 85%", once: true },
+    });
+    return () => {
+      tw.scrollTrigger?.kill();
+      tw.kill();
+    };
+  }, [to, prefix, suffix]);
+
+  return <span ref={ref}>{prefix}0{suffix}</span>;
+}
+
+/** Texto branco→peri. A cor secundária como segunda voz, não como acento. */
+const SPLIT =
+  "bg-gradient-to-r from-fg via-fg to-peri bg-clip-text text-transparent";
+const SPLIT_LIME =
+  "bg-gradient-to-r from-lime via-lime to-peri bg-clip-text text-transparent";
+
 const LIME = "text-lime";
-/** dimensões que sangram: o texto é maior que a viewport de propósito */
-const XL = "text-[clamp(3.2rem,13vw,11rem)]";
-const LG = "text-[clamp(2.4rem,8.5vw,7rem)]";
-const MD = "text-[clamp(1.9rem,5.6vw,4.4rem)]";
+/* dimensões que sangram: o texto é maior que a viewport de propósito.
+   O termo em vh é o que impede o beat de transbordar por cima do HUD em
+   tela baixa — só com vw um título de 4 linhas não cabe em 700px de altura. */
+const XL = "text-[clamp(3.2rem,min(13vw,17vh),11rem)]";
+const LG = "text-[clamp(2.4rem,min(8.5vw,11vh),7rem)]";
+const MD = "text-[clamp(1.9rem,min(5.6vw,7vh),4.4rem)]";
 
 /* ============================================================
    As batidas, na ordem do scroll
@@ -115,8 +165,8 @@ export function Abertura() {
         <Caption>{hero.sub}</Caption>
       </div>
 
-      {/* linha final sangra pela direita, em lime */}
-      <Huge align="right" className={`${XL} ${LIME} -mr-[4vw]`}>
+      {/* linha final sangra pela direita, lime virando peri */}
+      <Huge align="right" className={`${XL} ${SPLIT_LIME} -mr-[4vw]`}>
         {hero.headline[hero.headline.length - 1]}
       </Huge>
     </Beat>
@@ -128,10 +178,10 @@ export function Virada() {
   return (
     <>
       <Beat>
-        <Huge align="left" drift={4} className={`${LG} -ml-[2vw]`}>
+        <Huge align="left" drift={4} depth={0.12} className={`${LG} -ml-[2vw]`}>
           {virada.title[0]}
         </Huge>
-        <Huge align="right" drift={-4} className={`${LG} ${LIME} mt-3 -mr-[2vw]`}>
+        <Huge align="right" drift={-4} depth={0.12} className={`${LG} ${SPLIT_LIME} mt-3 -mr-[2vw]`}>
           {virada.title[1]}
         </Huge>
         <div className="mx-auto mt-16 max-w-lg text-center">
@@ -142,11 +192,12 @@ export function Virada() {
       {/* as três ondas, uma por tela */}
       {virada.cards.map((c) => (
         <Beat key={c.title} h="min-h-[85vh]">
-          <Caption className={c.now ? "text-lime" : "text-fg/45"}>{c.period}</Caption>
+          <Caption className={c.now ? "text-lime" : "text-peri/70"}>{c.period}</Caption>
           <Huge
             align="left"
             drift={c.now ? 3 : 2}
-            className={`${LG} mt-4 ${c.now ? LIME : "text-fg/85"}`}
+            depth={c.now ? 0.14 : 0.08}
+            className={`${LG} mt-4 ${c.now ? SPLIT_LIME : "text-fg/85"}`}
           >
             {c.title}
           </Huge>
@@ -250,7 +301,7 @@ export function Frentes() {
       {três.map((f, i) => (
         <Beat key={f.tag} h="min-h-[80vh]">
           <div className="flex items-baseline gap-6">
-            <span className={`${LG} font-medium text-lime/20`}>{`0${i + 1}`}</span>
+            <span className={`${LG} font-medium text-peri/35`}>{`0${i + 1}`}</span>
             <div>
               <Caption className="text-lime">{f.tag}</Caption>
               <h3 className={`${MD} mt-3 font-medium leading-tight`}>{f.title}</h3>
@@ -264,17 +315,17 @@ export function Frentes() {
 
       {/* o diagnóstico: seis dores como uma lista longa que passa */}
       <Beat h="min-h-[70vh]">
-        <Huge align="right" drift={-3} className={`${LG} whitespace-normal text-right ${LIME}`}>
+        <Huge align="right" drift={-3} depth={0.1} className={`${LG} whitespace-normal text-right ${SPLIT_LIME}`}>
           {dores.title}
         </Huge>
       </Beat>
 
       {dores.items.map((d, i) => (
         <Beat key={d.title} h="min-h-[62vh]">
-          <span className="font-mono text-[11px] tracking-[0.2em] text-lime/60">
+          <span className="font-mono text-[11px] tracking-[0.2em] text-peri/75">
             {String(i + 1).padStart(2, "0")}
           </span>
-          <p className="mt-5 max-w-3xl text-[clamp(1.4rem,3.6vw,2.9rem)] font-medium leading-[1.08] tracking-[-0.028em]">
+          <p className="mt-5 max-w-3xl text-[clamp(1.4rem,min(3.6vw,5vh),2.9rem)] font-medium leading-[1.08] tracking-[-0.028em]">
             {d.title}
           </p>
           <div className="mt-6 max-w-xl">
@@ -292,17 +343,16 @@ export function Numeros() {
     <>
       <Beat h="min-h-[60vh]">
         <Huge align="center" className={`${LG} mx-auto whitespace-normal text-center`}>
-          {stats.title[0]} <span className={LIME}>{stats.title[1]}</span>
+          {stats.title[0]} <span className={SPLIT_LIME}>{stats.title[1]}</span>
         </Huge>
       </Beat>
 
-      {/* cada número ocupa uma tela inteira */}
-      {stats.items.map((s) => (
+      {/* cada número ocupa uma tela inteira e sobe ao entrar */}
+      {stats.items.map((s, i) => (
         <Beat key={s.label} h="min-h-[78vh]" className="items-center text-center">
-          <p className={`${XL} font-medium leading-none ${LIME}`}>
-            {s.prefix}
-            {s.value}
-            <span className="text-[0.42em]">{s.suffix}</span>
+          <p className={`${XL} font-medium leading-none ${i % 2 ? "text-peri" : LIME}`}>
+            <Counter to={s.value} prefix={s.prefix} />
+            <span className="text-[0.42em] text-fg/70">{s.suffix}</span>
           </p>
           <div className="mx-auto mt-8 max-w-sm">
             <Caption>{s.label}</Caption>
@@ -348,26 +398,27 @@ export function Fecho() {
       </Beat>
 
       {/* fechamento: a pergunta ocupa a tela e o CTA é a única coisa clicável */}
-      <Beat h="min-h-[110vh]" className="items-center justify-center text-center">
+      <Beat h="min-h-screen" className="items-center justify-center text-center">
         <Caption className="text-lime">{finalCta.eyebrow}</Caption>
 
         <h2 className={`${LG} mx-auto mt-8 max-w-5xl font-medium leading-[0.95] tracking-[-0.035em]`}>
           {finalCta.title.slice(0, -1).join(" ")}{" "}
-          <span className={LIME}>{finalCta.title[finalCta.title.length - 1]}</span>
+          <span className={SPLIT_LIME}>{finalCta.title[finalCta.title.length - 1]}</span>
         </h2>
 
         <div className="mx-auto mt-10 max-w-md">
           <Caption className="normal-case tracking-[0.06em] text-fg/55">{finalCta.lead}</Caption>
         </div>
 
+        {/* pílula sólida: a única coisa opaca da página inteira, por isso puxa o olho */}
         <a
           href={WA_URL}
           target="_blank"
           rel="noopener"
-          className="group mt-12 inline-flex items-center gap-4 border-b border-lime/40 pb-2 font-mono text-[13px] uppercase tracking-[0.16em] text-lime transition hover:border-lime"
+          className="group mt-12 inline-flex items-center gap-3 rounded-full bg-lime px-8 py-4 text-[15px] font-semibold text-bg shadow-[0_0_44px_-6px_rgba(191,242,78,.55)] transition hover:shadow-[0_0_64px_-4px_rgba(191,242,78,.8)]"
         >
           {finalCta.primary}
-          <span className="transition-transform group-hover:translate-x-1.5">→</span>
+          <span className="transition-transform group-hover:translate-x-1">→</span>
         </a>
       </Beat>
     </>
