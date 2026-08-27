@@ -8,12 +8,22 @@ import { WA_URL } from "@/data/site";
 /** Lenis smooth scroll wired into GSAP ScrollTrigger. */
 export function SmoothScroll() {
   useEffect(() => {
-    const lenis = new Lenis({ duration: 1.1 });
+    // `anchors` makes #links respect Lenis instead of jumping natively.
+    const lenis = new Lenis({ duration: 1.1, anchors: { offset: -8 } });
     lenis.on("scroll", ScrollTrigger.update);
     const raf = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
+
+    // Pinned sections change page height after mount — recompute offsets so
+    // anchor targets and rail highlighting land in the right place.
+    const refresh = () => ScrollTrigger.refresh();
+    const t = setTimeout(refresh, 400);
+    window.addEventListener("load", refresh);
+
     return () => {
+      clearTimeout(t);
+      window.removeEventListener("load", refresh);
       gsap.ticker.remove(raf);
       lenis.destroy();
     };

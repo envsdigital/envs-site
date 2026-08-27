@@ -1,23 +1,23 @@
-import { SmoothScroll, Cursor, Nav } from "@/components/Chrome";
-import Hero from "@/components/Hero";
-import Virada from "@/components/Virada";
-import Diferenca from "@/components/Diferenca";
-import Futuro from "@/components/Futuro";
-import Frentes from "@/components/Frentes";
-import Dores from "@/components/Dores";
-import Agentes from "@/components/Agentes";
-import Visibilidade from "@/components/Visibilidade";
-import Metodo from "@/components/Metodo";
-import Prova from "@/components/Prova";
-import Final from "@/components/Final";
+import { SmoothScroll, Cursor } from "@/components/Chrome";
+import { Rail, Ticker, TopBar } from "@/components/v2/Shell";
+import Hero from "@/components/v2/Hero";
+import Virada from "@/components/v2/Virada";
+import Diferenca from "@/components/v2/Diferenca";
+import Futuro from "@/components/v2/Futuro";
+import Frentes from "@/components/v2/Frentes";
+import Dores from "@/components/v2/Dores";
+import Agentes from "@/components/v2/Agentes";
+import Metodo from "@/components/v2/Metodo";
+import Prova from "@/components/v2/Prova";
 
 export default function Page() {
   return (
-    <main>
+    <main className="pb-8 xl:pl-[92px]">
       <SmoothScroll />
       <Cursor />
       <div className="grain" />
-      <Nav />
+      <Rail />
+      <TopBar />
       <Hero />
       <Virada />
       <Diferenca />
@@ -25,10 +25,9 @@ export default function Page() {
       <Frentes />
       <Dores />
       <Agentes />
-      <Visibilidade />
       <Metodo />
       <Prova />
-      <Final />
+      <Ticker />
     </main>
   );
 }

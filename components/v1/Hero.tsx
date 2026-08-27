@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { hero } from "@/data/site";
-import { CtaButton } from "./Chrome";
+import { CtaButton } from "@/components/Chrome";
 
 /**
  * Canvas particle field: lime particles drift in a dark void and assemble into

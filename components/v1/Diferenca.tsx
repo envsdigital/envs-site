@@ -2,7 +2,7 @@
 
 import { diferenca } from "@/data/site";
 import { Reveal } from "@/lib/anim";
-import { CtaButton } from "./Chrome";
+import { CtaButton } from "@/components/Chrome";
 
 export default function Diferenca() {
   return (

@@ -5,7 +5,7 @@ import { gsap, Reveal, Counter } from "@/lib/anim";
 import { stats } from "@/data/site";
 import { depoimentos, depoimentosHeader } from "@/data/depoimentos";
 import { caseDestaque } from "@/data/case";
-import { CtaButton } from "./Chrome";
+import { CtaButton } from "@/components/Chrome";
 
 function Depoimentos() {
   return (
