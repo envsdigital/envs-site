@@ -42,9 +42,9 @@ export function Virada() {
         label={heads.virada.label}
         title={
           <>
-            Se 2024 foi o ano do chat,{" "}
+            {virada.title[0]}{" "}
             <span className="bg-gradient-to-r from-lime to-peri bg-clip-text text-transparent">
-              2026 é o ano da IA que executa
+              {virada.title[1]}
             </span>
           </>
         }
@@ -512,8 +512,8 @@ export function Fecho() {
               <div>
                 <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-lime">{garantiaFinal.eyebrow}</span>
                 <h2 className="h-display mt-4 text-[clamp(1.6rem,3.2vw,2.5rem)]">
-                  O risco é nosso tanto quanto é seu.{" "}
-                  <span className="text-lime">Resultado ou devolução.</span>
+                  {garantiaFinal.title[0]}{" "}
+                  <span className="text-lime">{garantiaFinal.title[1]}</span>
                 </h2>
               </div>
               <div>
@@ -541,8 +541,10 @@ export function Fecho() {
         <div className={`${S} relative py-32 text-center lg:py-40`}>
           <Pill>{finalCta.eyebrow}</Pill>
           <h2 className="h-display mx-auto mt-8 max-w-3xl text-[clamp(2.1rem,5.4vw,4.2rem)]">
-            Toda empresa vai precisar de um parceiro de tech com IA.{" "}
-            <span className="bg-gradient-to-r from-lime to-peri bg-clip-text text-transparent">A sua já tem?</span>
+            {finalCta.title.slice(0, -1).join(" ")}{" "}
+            <span className="bg-gradient-to-r from-lime to-peri bg-clip-text text-transparent">
+              {finalCta.title[finalCta.title.length - 1]}
+            </span>
           </h2>
           <p className="mx-auto mt-7 max-w-lg text-[15px] leading-relaxed text-fg/55">{finalCta.lead}</p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">

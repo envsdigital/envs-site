@@ -7,7 +7,9 @@
 
 import { defaultContent, type Content } from "./content";
 
-const WA = defaultContent.WA_URL;
+// mensagem própria: quem vem da v3.1 quer sistema sob medida, não automação
+const WA =
+  "https://wa.me/5588981697614?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20envs%20e%20quero%20um%20sistema%20sob%20medida%20para%20a%20minha%20empresa.";
 
 export const devContent: Content = {
   WA_URL: WA,
@@ -149,7 +151,11 @@ export const devContent: Content = {
     ],
   },
 
-  stack: defaultContent.stack,
+  stack: {
+    ...defaultContent.stack,
+    title: "Tecnologia de ponta, dominada de dentro para fora.",
+    lead: "A stack que a gente usa é a que o mercado usa para construir produto sério. Nada de framework exótico que ninguém mantém depois.",
+  },
 
   frentes: {
     eyebrow: "O QUE A ENVS FAZ",
@@ -322,7 +328,18 @@ export const devContent: Content = {
     },
   },
 
-  visibilidade: defaultContent.visibilidade,
+  visibilidade: {
+    ...defaultContent.visibilidade,
+    board: {
+      ...defaultContent.visibilidade.board,
+      rows: [
+        { task: "Integração com o ERP", sprint: "Sprint 4", status: "Concluído" },
+        { task: "Portal do cliente v2", sprint: "Sprint 5", status: "Em andamento" },
+        { task: "Dashboard de métricas", sprint: "Sprint 5", status: "Backlog" },
+        { task: "App de campo — offline", sprint: "Sprint 6", status: "Backlog" },
+      ],
+    },
+  },
 
   falha: {
     eyebrow: "POR QUE PROJETOS FALHAM",
@@ -393,7 +410,10 @@ export const devContent: Content = {
     lead: "Devs, designers, gestores e especialistas em produto. Todos sob o mesmo teto, focados na sua operação.",
   },
 
-  garantiaFinal: defaultContent.garantiaFinal,
+  garantiaFinal: {
+    ...defaultContent.garantiaFinal,
+    title: ["O risco é nosso tanto quanto é seu.", "Resultado ou devolução."],
+  },
 
   finalCta: {
     eyebrow: "PRONTO PARA SAIR DA PLANILHA?",

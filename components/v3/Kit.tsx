@@ -2,23 +2,26 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/anim";
-import { WA_URL } from "@/data/site";
+import { useContent } from "./Content";
 
 /* ---------- primitivos da linguagem v3 ---------- */
 
 export function Glossy({
   children,
-  href = WA_URL,
+  href,
   className = "",
 }: {
   children: React.ReactNode;
   href?: string;
   className?: string;
 }) {
-  const ext = href.startsWith("http");
+  // sem href explícito, cai no WhatsApp da variante ativa
+  const { WA_URL } = useContent();
+  const to = href ?? WA_URL;
+  const ext = to.startsWith("http");
   return (
     <a
-      href={href}
+      href={to}
       target={ext ? "_blank" : undefined}
       rel={ext ? "noopener" : undefined}
       className={`glossy inline-flex items-center gap-2.5 px-7 py-3.5 text-[15px] font-medium text-fg ${className}`}
