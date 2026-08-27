@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { hero, WA_URL } from "@/data/site";
 import { Glossy, Ghost, Pill } from "./Kit";
+import Aurora from "./Aurora";
 
 const NAV = [
   { label: "A virada", href: "#virada" },
@@ -119,11 +120,19 @@ function AgentPanel() {
 export default function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
-      {/* fundo: estrelas em cima, aurora no horizonte, chão escuro */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="stars absolute inset-x-0 top-0 h-[80vh]" />
-        <div className="aurora" />
-        <div className="aurora-floor" />
+      {/* fundo: aurora sobre o limbo do planeta (canvas animado) */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[118vh]">
+        <Aurora />
+        {/* vinheta central: protege a legibilidade do headline */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 42% 34% at 50% 34%, rgba(13,13,13,0.72), transparent 72%)",
+          }}
+        />
+        {/* queda para o fundo do site */}
+        <div className="absolute inset-x-0 bottom-0 h-[26vh] bg-gradient-to-b from-transparent to-bg" />
       </div>
 
       <div className="relative mx-auto max-w-[1240px] px-5 pt-36 text-center">
