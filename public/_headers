@@ -10,10 +10,13 @@
 /logos/*
   Cache-Control: public, max-age=604800
 
-# O HTML não pode ser guardado: é o que aponta para os bundles novos
-# depois de cada deploy.
+# Sem Cache-Control aqui. As regras deste arquivo são cumulativas, não
+# hierárquicas: o que estiver em /* é ANEXADO ao que já casou acima, e o
+# bundle saía com "max-age=31536000, immutable, max-age=0, must-revalidate"
+# — dois max-age na mesma linha, com o must-revalidate anulando o cache
+# longo. O padrão do Pages para HTML já é revalidar sempre, que é o que
+# queremos.
 /*
-  Cache-Control: public, max-age=0, must-revalidate
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
