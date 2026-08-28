@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/anim";
 import { useContent } from "@/components/v3/Content";
 import { Magnetic } from "@/components/v4/Cursor";
+import { ParticleText } from "@/components/v4/ParticleText";
 
 /* ============================================================
    Primitivos tipográficos da v4.
@@ -40,7 +41,7 @@ const reduced = () =>
 function fitSize(text: string, bleed = 1, max = 11) {
   const chars = Math.max(text.length, 1);
   const vw = (bleed * 100) / (chars * 0.56);
-  return `clamp(1.7rem, ${vw.toFixed(2)}vw, ${max}rem)`;
+  return `clamp(1.4rem, ${vw.toFixed(2)}vw, ${max}rem)`;
 }
 
 /**
@@ -172,8 +173,8 @@ function Beat({
   h?: string;
 }) {
   return (
-    // py-24: mantém o conteúdo fora da faixa do HUD fixo em cima e embaixo
-    <section className={`relative flex ${h} flex-col justify-center px-8 py-24 ${className}`}>
+    // py: mantém o conteúdo fora da faixa do HUD fixo em cima e embaixo
+    <section className={`relative flex ${h} flex-col justify-center px-5 py-20 sm:px-8 sm:py-24 ${className}`}>
       {children}
     </section>
   );
@@ -252,7 +253,11 @@ function Huge({
     <div
       ref={ref}
       style={fit ? { fontSize: fitSize(fit, bleed, max) } : undefined}
-      className={`whitespace-nowrap font-medium leading-[0.88] tracking-[-0.035em] ${a} ${className}`}
+      // nowrap só quando o tamanho veio de `fit`, que é o caso em que a
+      // linha foi dimensionada pra caber. Deixar nowrap na base fazia os
+      // títulos longos esticarem a página na horizontal: `whitespace-normal`
+      // na className não vence — mesma especificidade, ordem do CSS decide.
+      className={`${fit ? "whitespace-nowrap" : ""} font-medium leading-[0.88] tracking-[-0.035em] ${a} ${className}`}
     >
       {fit ? <Letters text={fit} /> : children}
     </div>
@@ -325,15 +330,12 @@ export function Abertura() {
         <Caption>{hero.sub}</Caption>
       </div>
 
-      {/* linha final sangra pela direita, lime virando peri */}
-      <Huge
+      {/* linha final: monta de partículas, lime virando peri */}
+      <ParticleText
+        text={hero.headline[hero.headline.length - 1]}
         align="right"
-        fit={hero.headline[hero.headline.length - 1]}
-        bleed={1.06}
-        className={`${SPLIT_LIME} -mr-[3vw]`}
-      >
-        {null}
-      </Huge>
+        bleed={1.02}
+      />
     </Beat>
   );
 }
@@ -367,16 +369,23 @@ export function Virada() {
           <Caption className={c.now ? "text-lime" : "text-peri/70"}>
             <Scramble text={c.period} />
           </Caption>
-          <Huge
-            align="left"
-            drift={c.now ? 3 : 2}
-            depth={c.now ? 0.14 : 0.08}
-            fit={c.title}
-            max={7}
-            className={`mt-4 ${c.now ? SPLIT_LIME : "text-fg/85"}`}
-          >
-            {null}
-          </Huge>
+          {/* a onda atual se monta de partículas; as passadas ficam estáticas */}
+          {c.now ? (
+            <div className="mt-4">
+              <ParticleText text={c.title} align="left" bleed={0.94} max={7} />
+            </div>
+          ) : (
+            <Huge
+              align="left"
+              drift={2}
+              depth={0.08}
+              fit={c.title}
+              max={7}
+              className="mt-4 text-fg/85"
+            >
+              {null}
+            </Huge>
+          )}
           <div className="mt-8 max-w-md">
             <Caption className="normal-case tracking-[0.06em] text-fg/55">{c.desc}</Caption>
           </div>

@@ -26,12 +26,13 @@ export function Hud() {
 
   return (
     <>
-      <div className="pointer-events-none fixed inset-x-0 top-0 z-40 flex items-center justify-between px-8 py-6">
-        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-fg/85">
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-40 flex items-center justify-between px-4 py-4 sm:px-8 sm:py-6">
+        {/* em tela estreita o rótulo de status sai: sobram logo e CTA */}
+        <span className="hidden font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-fg/85 sm:inline">
           {status}
         </span>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logos/envs-wordmark.svg" alt="envs" className="h-[15px] w-auto opacity-90" />
+        <img src="/logos/envs-wordmark.svg" alt="envs" className="h-[13px] w-auto opacity-90 sm:h-[15px]" />
         <a
           href={WA_URL}
           target="_blank"
@@ -42,8 +43,8 @@ export function Hud() {
         </a>
       </div>
 
-      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex items-end justify-between px-8 py-6">
-        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-fg/55">
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex items-end justify-between px-4 py-4 sm:px-8 sm:py-6">
+        <span className="hidden font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-fg/55 sm:inline">
           envs.com.br
         </span>
 

@@ -71,15 +71,19 @@ export default function Field() {
     resize();
     window.addEventListener("resize", resize);
 
-    // ---- geometria do terreno ----
-    const COLS = 76;        // largura da grade
-    const ROWS = 130;       // profundidade
-    const SPACING = 26;     // distância entre pontos
+    /* ---- geometria do terreno ----
+       A densidade cai em tela pequena: a mesma grade que roda folgado num
+       desktop derruba o frame rate num celular, e ninguém vê 76 colunas em
+       400px de largura mesmo. */
+    const small = window.innerWidth < 720;
+    const COLS = small ? 44 : 76;   // largura da grade
+    const ROWS = small ? 84 : 130;  // profundidade
+    const SPACING = 26;             // distância entre pontos
     const DEPTH = ROWS * SPACING;
-    const EYE = 70;         // altura da câmera sobre o terreno
+    const EYE = 70;                 // altura da câmera sobre o terreno
 
     // poeira ambiente
-    const dust = Array.from({ length: 520 }, () => ({
+    const dust = Array.from({ length: small ? 240 : 520 }, () => ({
       x: (Math.random() - 0.5) * COLS * SPACING * 1.3,
       y: -Math.random() * 420 - 10,
       z: Math.random() * DEPTH,
@@ -89,7 +93,7 @@ export default function Field() {
 
     // pluma: jato que sobe no horizonte. z fixo à frente da câmera, então
     // acompanha o voo em vez de ficar pra trás.
-    const plume = Array.from({ length: 300 }, () => ({
+    const plume = Array.from({ length: small ? 140 : 300 }, () => ({
       a: Math.random() * Math.PI * 2,
       r: Math.random() * Math.random() * 340,
       y: Math.random() * 620,
@@ -101,7 +105,7 @@ export default function Field() {
 
     // poeira de primeiro plano: passa entre a câmera e o texto.
     // Muitas e pequenas — poucas e grandes viram bolhas verdes na frente da copy.
-    const near = Array.from({ length: 220 }, () => ({
+    const near = Array.from({ length: small ? 90 : 220 }, () => ({
       x: (Math.random() - 0.5) * 2400,
       y: (Math.random() - 0.5) * 1500,
       z: 40 + Math.random() * 470,
@@ -143,8 +147,50 @@ export default function Field() {
     };
     if (!reduce) window.addEventListener("pointermove", onMove, { passive: true });
 
+    /* ---- clique: efeito diferente conforme o trecho da página ----
+       1. abertura  → onda de choque atravessando o terreno
+       2. meio      → explosão de partículas no ponto do clique
+       3. números   → a cena inteira vira lavanda por um instante
+       4. vórtice   → pulso que acelera o giro e abre a espiral */
+    const ripples: { x: number; y: number; t0: number }[] = [];
+    const sparks: {
+      x: number; y: number; vx: number; vy: number; life: number; peri: boolean;
+    }[] = [];
+    let flash = 0;
+    let pulse = 0;
+    let spinBoost = 0;
+
+    const onDown = (e: PointerEvent) => {
+      if (reduce) return;
+      const max = document.body.scrollHeight - window.innerHeight;
+      const prog = max > 0 ? window.scrollY / max : 0;
+
+      if (prog < 0.18) {
+        ripples.push({ x: e.clientX, y: e.clientY, t0: performance.now() });
+        if (ripples.length > 4) ripples.shift();
+      } else if (prog < 0.55) {
+        for (let i = 0; i < 90; i++) {
+          const a = Math.random() * Math.PI * 2;
+          const v = 2 + Math.random() * 9;
+          sparks.push({
+            x: e.clientX, y: e.clientY,
+            vx: Math.cos(a) * v, vy: Math.sin(a) * v - 1.5,
+            life: 1, peri: Math.random() < 0.45,
+          });
+        }
+        if (sparks.length > 500) sparks.splice(0, sparks.length - 500);
+      } else if (prog < 0.8) {
+        flash = 1;
+      } else {
+        pulse = 1;
+        spinBoost = 2.4;
+      }
+    };
+    window.addEventListener("pointerdown", onDown, { passive: true });
+
     let raf = 0;
     let alive = true;
+    let spinPhase = 0;
     const t0 = performance.now();
 
     const draw = () => {
@@ -157,7 +203,17 @@ export default function Field() {
       vor += (targetVor - vor) * 0.05;
       mx += (tmx - mx) * 0.045;
       my += (tmy - my) * 0.045;
-      const spin = t * 0.22;
+
+      // decaimento dos efeitos de clique
+      flash *= 0.94;
+      pulse *= 0.955;
+      spinBoost *= 0.965;
+      spinPhase += (0.22 + spinBoost) * 0.016;
+      const spin = spinPhase;
+      const now = performance.now();
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        if (now - ripples[i].t0 > 1800) ripples.splice(i, 1);
+      }
 
       const focal = h * 0.86;
       const cx = w / 2 + mx * 46;
@@ -222,7 +278,7 @@ export default function Field() {
               // espiral: a fileira vira raio, a coluna vira ângulo
               const ang = (c / COLS) * Math.PI * 2 + (r / ROWS) * 5.5 + spin;
               // raio contido: com 1450 só a borda da espiral cabia na tela
-              const rad = 70 + (r / ROWS) * 640;
+              const rad = (70 + (r / ROWS) * 640) * (1 + pulse * 0.5);
               const vx = Math.cos(ang) * rad;
               const vy = Math.sin(ang) * rad * 0.62;
               const vz = 760 + Math.sin(ang) * rad * 0.5;
@@ -236,6 +292,15 @@ export default function Field() {
               sx = cx + x * scale;
               sy = cy + y * scale;
             }
+            // onda de choque: uma crista que se afasta do ponto do clique
+            for (const rp of ripples) {
+              const age = (now - rp.t0) / 1000;
+              const front = age * 950;
+              const dd = (Math.hypot(sx - rp.x, sy - rp.y) - front) / 130;
+              if (dd > 3 || dd < -3) continue;
+              sy -= Math.exp(-dd * dd) * 66 * (1 - age / 1.8);
+            }
+
             if (sx < -90 || sx > w + 90) continue;
             if (sy < -90 || sy > h + 90) continue;
 
@@ -244,7 +309,8 @@ export default function Field() {
 
             // faixas de peri atravessando o lime, deslocando devagar
             const band = 0.5 + 0.5 * Math.sin(x * 0.0016 + wz * 0.0011 + t * 0.13);
-            const m = Math.pow(band, 1.7);
+            // o flash empurra a mistura toda pro lavanda
+            const m = Math.min(1, Math.pow(band, 1.7) + flash);
             const cr = LIME[0] + (PERI[0] - LIME[0]) * m;
             const cg = LIME[1] + (PERI[1] - LIME[1]) * m;
             const cb = LIME[2] + (PERI[2] - LIME[2]) * m;
@@ -397,6 +463,25 @@ export default function Field() {
         fctx.fill();
       }
 
+      /* ---- 7. faíscas do clique, no mesmo plano da frente ---- */
+      for (let i = sparks.length - 1; i >= 0; i--) {
+        const s = sparks[i];
+        s.x += s.vx;
+        s.y += s.vy;
+        s.vy += 0.14;          // gravidade
+        s.vx *= 0.985;
+        s.vy *= 0.985;
+        s.life -= 0.016;
+        if (s.life <= 0) {
+          sparks.splice(i, 1);
+          continue;
+        }
+        const c = s.peri ? PERI : LIME;
+        fctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${s.life * 0.9})`;
+        const sz = 1.4 + s.life * 2.2;
+        fctx.fillRect(s.x, s.y, sz, sz);
+      }
+
       raf = requestAnimationFrame(draw);
     };
     raf = requestAnimationFrame(draw);
@@ -407,6 +492,7 @@ export default function Field() {
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerdown", onDown);
     };
   }, []);
 
