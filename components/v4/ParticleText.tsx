@@ -3,12 +3,14 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Texto que se monta de partículas ao entrar na tela.
+ * Texto que se monta de partículas conforme a página rola.
  *
  * O texto é desenhado uma vez num canvas fora da tela; os pixels acesos
- * viram os alvos das partículas, que entram espalhadas e convergem para o
- * seu lugar. Depois de assentar, cada uma respira de leve — parado demais
- * denunciaria que virou imagem.
+ * viram os alvos das partículas. A posição de cada uma é interpolada entre
+ * o ponto espalhado e o alvo por um fator que sai da posição do bloco na
+ * viewport: espalhado ao entrar por baixo, formado no centro, espalhado de
+ * novo ao sair por cima. Como tudo vem do scroll e nada de um relógio, o
+ * movimento é reversível — subir a página desfaz o texto.
  *
  * O texto real fica num filho visualmente escondido, para leitor de tela e
  * para busca: o canvas é decorativo.
@@ -47,11 +49,14 @@ export function ParticleText({
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     let raf = 0;
-    let started = false;
+    let visible = false;
+    let built = false;
     let parts: {
-      tx: number; ty: number; x: number; y: number; vx: number; vy: number; m: number;
+      tx: number; ty: number;   // alvo
+      sx: number; sy: number;   // ponto espalhado
+      d: number;                // atraso: escalona a chegada
+      m: number;                // 0..1 → lime→peri ao longo da linha
     }[] = [];
-    let t0 = 0;
     let dpr = 1;
     let W = 0, H = 0;
 
@@ -94,74 +99,73 @@ export function ParticleText({
           next.push({
             tx: x,
             ty: y,
-            x: reduce ? x : x + (Math.random() - 0.5) * W * 0.9,
-            y: reduce ? y : y + (Math.random() - 0.5) * H * 7,
-            vx: 0,
-            vy: 0,
+            sx: x + (Math.random() - 0.5) * W * 0.5,
+            sy: y + (Math.random() - 0.5) * H * 4,
+            d: Math.random() * 0.34,
             m: gradient ? x / Math.max(1, W) : 0,
           });
         }
       }
       parts = next;
+      built = true;
     };
 
     const draw = () => {
-      const el = (performance.now() - t0) / 1000;
+      raf = requestAnimationFrame(draw);
+      if (!visible || !built) return;
+
+      /* fator de formação, tirado da posição do bloco na viewport:
+         entra por baixo → 0, formado no miolo, desfeito ao sair por cima.
+         O platô importa: sem ele a frase só fica legível no centro exato
+         e o leitor nunca chega a lê-la inteira. */
+      const r = host.getBoundingClientRect();
+      const v = (r.top + r.height / 2) / window.innerHeight;
+      const off = Math.abs(v - 0.5);
+      const form = reduce
+        ? 1
+        : 1 - Math.min(1, Math.max(0, (off - 0.14) / 0.24));
+
+      const t = performance.now() / 1000;
       ctx.clearRect(0, 0, W, H);
       ctx.globalCompositeOperation = "lighter";
 
       for (const p of parts) {
-        // mola crítica: acelera pro alvo e amortece
-        p.vx = (p.vx + (p.tx - p.x) * 0.045) * 0.86;
-        p.vy = (p.vy + (p.ty - p.y) * 0.045) * 0.86;
-        p.x += p.vx;
-        p.y += p.vy;
+        // cada partícula tem seu próprio trecho do percurso
+        const pi = Math.min(1, Math.max(0, (form - p.d) / (1 - p.d)));
+        const e = pi * pi * (3 - 2 * pi);   // smoothstep
 
-        // respiro depois de assentar
-        const br = el > 1.6 ? Math.sin(el * 1.7 + p.tx * 0.05) * 0.5 : 0;
+        // deriva lenta enquanto está solta, pra não parecer congelada
+        const drift = (1 - e) * 6;
+        const x = p.sx + (p.tx - p.sx) * e + Math.sin(t * 0.7 + p.d * 20) * drift;
+        const y = p.sy + (p.ty - p.sy) * e + Math.cos(t * 0.6 + p.d * 26) * drift;
 
         const cr = LIME[0] + (PERI[0] - LIME[0]) * p.m;
         const cg = LIME[1] + (PERI[1] - LIME[1]) * p.m;
         const cb = LIME[2] + (PERI[2] - LIME[2]) * p.m;
-        // entra apagada e acende conforme chega
-        const near = 1 - Math.min(1, Math.hypot(p.tx - p.x, p.ty - p.y) / 90);
-        ctx.fillStyle = `rgba(${cr | 0},${cg | 0},${cb | 0},${0.35 + 0.65 * near})`;
-        ctx.fillRect(p.x, p.y + br, 1.7, 1.7);
+        ctx.fillStyle = `rgba(${cr | 0},${cg | 0},${cb | 0},${(0.12 + 0.88 * e).toFixed(3)})`;
+        ctx.fillRect(x, y, 1.7, 1.7);
       }
 
       ctx.globalCompositeOperation = "source-over";
-      raf = requestAnimationFrame(draw);
     };
 
-    const start = () => {
-      if (started) return;
-      started = true;
-      const go = () => {
-        build();
-        t0 = performance.now();
-        raf = requestAnimationFrame(draw);
-      };
-      // amostrar antes da fonte carregar produz o recorte da fonte de sistema
-      if (document.fonts?.ready) document.fonts.ready.then(go);
-      else go();
-    };
+    // amostrar antes da fonte carregar produz o recorte da fonte de sistema
+    if (document.fonts?.ready) document.fonts.ready.then(build);
+    else build();
 
+    // o laço só roda enquanto o bloco está por perto
     const io = new IntersectionObserver(
       ([e]) => {
-        if (e.isIntersecting) {
-          start();
-          io.disconnect();
-        }
+        visible = e.isIntersecting;
       },
-      { rootMargin: "-10% 0px" }
+      { rootMargin: "20% 0px" }
     );
     io.observe(host);
+    raf = requestAnimationFrame(draw);
 
     const onResize = () => {
-      if (!started) return;
-      cancelAnimationFrame(raf);
+      built = false;
       build();
-      raf = requestAnimationFrame(draw);
     };
     window.addEventListener("resize", onResize);
 

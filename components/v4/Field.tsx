@@ -149,13 +149,11 @@ export default function Field() {
 
     /* ---- clique: efeito diferente conforme o trecho da página ----
        1. abertura  → onda de choque atravessando o terreno
-       2. meio      → explosão de partículas no ponto do clique
+       2. meio      → anel de luz que se abre a partir do ponto do clique
        3. números   → a cena inteira vira lavanda por um instante
        4. vórtice   → pulso que acelera o giro e abre a espiral */
     const ripples: { x: number; y: number; t0: number }[] = [];
-    const sparks: {
-      x: number; y: number; vx: number; vy: number; life: number; peri: boolean;
-    }[] = [];
+    const rings: { x: number; y: number; t0: number }[] = [];
     let flash = 0;
     let pulse = 0;
     let spinBoost = 0;
@@ -169,16 +167,8 @@ export default function Field() {
         ripples.push({ x: e.clientX, y: e.clientY, t0: performance.now() });
         if (ripples.length > 4) ripples.shift();
       } else if (prog < 0.55) {
-        for (let i = 0; i < 90; i++) {
-          const a = Math.random() * Math.PI * 2;
-          const v = 2 + Math.random() * 9;
-          sparks.push({
-            x: e.clientX, y: e.clientY,
-            vx: Math.cos(a) * v, vy: Math.sin(a) * v - 1.5,
-            life: 1, peri: Math.random() < 0.45,
-          });
-        }
-        if (sparks.length > 500) sparks.splice(0, sparks.length - 500);
+        rings.push({ x: e.clientX, y: e.clientY, t0: performance.now() });
+        if (rings.length > 5) rings.shift();
       } else if (prog < 0.8) {
         flash = 1;
       } else {
@@ -316,12 +306,13 @@ export default function Field() {
             const cb = LIME[2] + (PERI[2] - LIME[2]) * m;
 
             if (glow) {
-              // perto da câmera os pontos se afastam na tela e cada mancha
-              // vira uma bolha solta; atenua em vez de deixar o blob isolado
-              const near = Math.min(1, 26 / Math.max(1, scale * 26 - 30));
-              const a = fade * fade * (0.07 + hn * 0.2) * near;
-              if (a < 0.006) continue;
               const rad = Math.min(54, Math.max(3, scale * 26));
+              // perto da câmera os pontos se afastam na tela e cada mancha
+              // destaca como bolha solta em vez de somar num campo. Atenua
+              // pela própria largura da mancha: quanto maior, mais isolada.
+              const solo = Math.min(1, Math.max(0.04, 1 - (rad - 14) / 40));
+              const a = fade * fade * (0.07 + hn * 0.2) * solo;
+              if (a < 0.006) continue;
               c2.fillStyle = `rgba(${Math.round(cr * 0.62)},${Math.round(cg * 0.62)},${Math.round(cb * 0.5)},${a})`;
               c2.fillRect(sx - rad / 2, sy - rad / 2, rad, rad);
             } else {
@@ -463,23 +454,27 @@ export default function Field() {
         fctx.fill();
       }
 
-      /* ---- 7. faíscas do clique, no mesmo plano da frente ---- */
-      for (let i = sparks.length - 1; i >= 0; i--) {
-        const s = sparks[i];
-        s.x += s.vx;
-        s.y += s.vy;
-        s.vy += 0.14;          // gravidade
-        s.vx *= 0.985;
-        s.vy *= 0.985;
-        s.life -= 0.016;
-        if (s.life <= 0) {
-          sparks.splice(i, 1);
+      /* ---- 7. anel de luz do clique ----
+         um traço largo com gradiente nas duas cores, abrindo e apagando */
+      for (let i = rings.length - 1; i >= 0; i--) {
+        const age = (now - rings[i].t0) / 1000;
+        if (age > 1.15) {
+          rings.splice(i, 1);
           continue;
         }
-        const c = s.peri ? PERI : LIME;
-        fctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${s.life * 0.9})`;
-        const sz = 1.4 + s.life * 2.2;
-        fctx.fillRect(s.x, s.y, sz, sz);
+        const k = age / 1.15;
+        const rad = 18 + (1 - Math.pow(1 - k, 3)) * 330;
+        const a = (1 - k) * (1 - k) * 0.5;
+        const g = fctx.createLinearGradient(
+          rings[i].x - rad, rings[i].y, rings[i].x + rad, rings[i].y
+        );
+        g.addColorStop(0, `rgba(${LIME[0]},${LIME[1]},${LIME[2]},${a})`);
+        g.addColorStop(1, `rgba(${PERI[0]},${PERI[1]},${PERI[2]},${a})`);
+        fctx.strokeStyle = g;
+        fctx.lineWidth = 1 + (1 - k) * 8;
+        fctx.beginPath();
+        fctx.arc(rings[i].x, rings[i].y, rad, 0, Math.PI * 2);
+        fctx.stroke();
       }
 
       raf = requestAnimationFrame(draw);

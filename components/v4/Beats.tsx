@@ -65,9 +65,12 @@ function Letters({ text, className = "" }: { text: string; className?: string })
       const r = el.getBoundingClientRect();
       // o pai pode estar escalado pelo scroll; offsetLeft não sabe disso
       const k = el.offsetWidth ? r.width / el.offsetWidth : 1;
+      // offsetLeft das letras é relativo ao mesmo offsetParent do wrapper,
+      // então a diferença dá a posição dentro dele
+      const bl = el.offsetLeft, bt = el.offsetTop;
       for (const c of kids) {
-        const px = r.left + (c.offsetLeft + c.offsetWidth / 2) * k;
-        const py = r.top + (c.offsetTop + c.offsetHeight / 2) * k;
+        const px = r.left + (c.offsetLeft - bl + c.offsetWidth / 2) * k;
+        const py = r.top + (c.offsetTop - bt + c.offsetHeight / 2) * k;
         const d = Math.hypot(ptr.x - px, ptr.y - py);
         const f = Math.max(0, 1 - d / 240);
         const e = f * f;
@@ -91,7 +94,9 @@ function Letters({ text, className = "" }: { text: string; className?: string })
   }, [text]);
 
   return (
-    <span ref={ref} aria-label={text} className={`relative inline-block ${className}`}>
+    // sem `relative`: um wrapper posicionado sai da forma de recorte do
+    // `bg-clip-text` do pai e o gradiente vaza como uma mancha na origem
+    <span ref={ref} aria-label={text} className={`inline-block ${className}`}>
       {Array.from(text).map((ch, i) => (
         <span
           key={i}
@@ -348,13 +353,16 @@ export function Virada() {
         <Huge align="left" drift={4} depth={0.12} fit={virada.title[0]} max={7} className="-ml-[2vw]">
           {null}
         </Huge>
+        {/* cor sólida, não gradiente: `bg-clip-text` recorta pela forma do
+            texto do próprio elemento e não lida com os spans por letra do
+            `fit` — o fundo vaza como uma mancha na origem do bloco. */}
         <Huge
           align="right"
           drift={-4}
           depth={0.12}
           fit={virada.title[1]}
           max={7}
-          className={`${SPLIT_LIME} mt-3 -mr-[2vw]`}
+          className="mt-3 -mr-[2vw] text-peri"
         >
           {null}
         </Huge>
