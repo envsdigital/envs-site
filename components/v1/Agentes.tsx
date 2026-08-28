@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { agentes } from "@/data/site";
 import { gsap, Reveal } from "@/lib/anim";
+import Icon from "@/components/Icon";
 
 export default function Agentes() {
   const [active, setActive] = useState(0);
@@ -39,7 +40,7 @@ export default function Agentes() {
                   i === active ? "bg-lime/10 font-bold text-lime" : "text-fg/60 hover:bg-white/5 hover:text-fg"
                 }`}
               >
-                <span aria-hidden>{t.icon}</span>
+                <Icon name={t.icon} />
                 {t.label}
               </button>
             ))}

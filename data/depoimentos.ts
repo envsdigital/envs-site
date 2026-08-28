@@ -31,7 +31,7 @@ export const depoimentos: Depoimento[] = [
     cargo: "Fundador",
     empresa: "Meduca",
     texto:
-      "Eu tinha o produto na cabeça e nenhuma linha de código. Em seis meses estava no ar com usuário pagante. O que mais me pegou não foi a entrega — foi que eles continuaram depois dela.",
+      "Eu tinha o produto na cabeça e nenhuma linha de código. Em seis meses estava no ar com usuário pagante. O que mais me pegou não foi a entrega, foi que eles continuaram depois dela.",
     verificado: false,
   },
 ];

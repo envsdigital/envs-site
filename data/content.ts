@@ -54,12 +54,12 @@ export const defaultContent = {
   statement: {
     lead: "A envs coloca",
     highlight: "agentes de IA para operar",
-    rest: "seu financeiro, jurídico, comercial e logística — integra os sistemas que você já usa e continua do seu lado enquanto o negócio cresce.",
+    rest: "seu financeiro, jurídico, comercial e logística. Integra os sistemas que você já usa e continua do seu lado enquanto o negócio cresce.",
   },
   /** rótulos dos itens do card "Integra o que você já usa" */
   integraTitle: "Integra o que você já usa",
   integraDesc:
-    "Planilhas, documentos, softwares, APIs — qualquer sistema. Sem trocar sua stack.",
+    "Planilhas, documentos, softwares, APIs, qualquer sistema. Sem trocar sua stack.",
   integraItems: ["ERP", "CRM", "Banco", "NF-e", "Sheets", "Slack", "E-mail", "APIs"],
   /** cabeçalhos das seções */
   heads: {

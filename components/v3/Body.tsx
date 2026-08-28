@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Reveal, Counter } from "@/lib/anim";
 import { Head, Bento, Orb, Glossy, Ghost, Pill, ArtGlow, ArtSliders, ArtSystems, ArtChart } from "./Kit";
 import Aurora from "./Aurora";
+import Icon from "@/components/Icon";
 import { useContent } from "./Content";
 
 const S = "mx-auto max-w-[1240px] px-5";
@@ -69,7 +70,7 @@ export function Virada() {
               <ul className="mt-6 space-y-2 border-t border-white/8 pt-5">
                 {c.items.map((it) => (
                   <li key={it} className="flex items-start gap-2.5 text-[13.5px] text-fg/70">
-                    <span className={c.now ? "text-lime" : "text-fg/25"}>{c.now ? "✓" : "—"}</span>
+                    <span className={c.now ? "text-lime" : "text-fg/25"}>{c.now ? "✓" : "·"}</span>
                     {it}
                   </li>
                 ))}
@@ -225,7 +226,7 @@ export function Agentes() {
                 k === i ? "border-lime text-fg" : "border-white/10 text-fg/45 hover:text-fg/80"
               }`}
             >
-              <span aria-hidden className="text-base">{tb.icon}</span>
+              <Icon name={tb.icon} className="h-[18px] w-[18px]" />
               {tb.label}
             </button>
           ))}

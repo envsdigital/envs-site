@@ -60,7 +60,7 @@ export const devContent: Content = {
         title: "Planilha e improviso",
         desc: "Tudo cabe numa aba. O processo mora na cabeça de quem fez.",
         items: ["Controle manual", "Zero rastreabilidade", "Some com a pessoa"],
-        kicker: "Funciona — até crescer.",
+        kicker: "Funciona, até crescer.",
         now: false,
       },
       {
@@ -72,7 +72,7 @@ export const devContent: Content = {
         now: false,
       },
       {
-        period: "FASE 3 — AGORA",
+        period: "FASE 3: AGORA",
         title: "Software próprio",
         desc: "O sistema nasce do seu processo real. Cada tela existe porque alguém usa.",
         items: [
@@ -102,13 +102,13 @@ export const devContent: Content = {
       },
     ],
     analogy:
-      "Sistema pronto é terno de loja: veste, mas aperta em algum lugar e sobra em outro. Você passa o dia ajustando a postura para caber nele. Sob medida é o contrário — a roupa se ajusta ao corpo, e você esquece que está usando.",
+      "Sistema pronto é terno de loja: veste, mas aperta em algum lugar e sobra em outro. Você passa o dia ajustando a postura para caber nele. Sob medida é o contrário: a roupa se ajusta ao corpo, e você esquece que está usando.",
     praticaTitle: "Como um sistema sob medida nasce",
     praticaLead: "Não começa no código. Começa entendendo como sua empresa funciona de verdade.",
     verbs: ["Mapeia", "Prototipa", "Constrói", "Evolui"],
     systems: ["ERP", "CRM", "Banco", "Fiscal", "Planilhas", "APIs", "o que você já usa"],
     fecho:
-      "Toda empresa que cresceu tem um processo que só ela faz daquele jeito. Esse processo é o seu diferencial — e é justamente ele que nenhum sistema pronto cobre. Software sob medida é transformar o que te torna diferente em algo que escala.",
+      "Toda empresa que cresceu tem um processo que só ela faz daquele jeito. Esse processo é o seu diferencial, e é justamente ele que nenhum sistema pronto cobre. Software sob medida é transformar o que te torna diferente em algo que escala.",
     cta: "Quero conversar sobre o meu",
     provaTitle: "Mais de 5 anos construindo software para quem não pode parar.",
     setores: ["Educação", "Telecomunicações", "Marketing Digital", "E-commerce", "SaaS"],
@@ -180,7 +180,7 @@ export const devContent: Content = {
     f2: {
       tag: "FRENTE 02",
       title: "Integrações e Automação",
-      desc: "Faz seus sistemas conversarem. ERP, CRM, banco, fiscal, planilhas — dado circulando sozinho, sem digitação dupla.",
+      desc: "Faz seus sistemas conversarem. ERP, CRM, banco, fiscal, planilhas: dado circulando sozinho, sem digitação dupla.",
       pipeline: ["Mapeia", "Integra", "No ar ✓"],
     },
     f3: {
@@ -220,7 +220,7 @@ export const devContent: Content = {
       },
       {
         title: "Para saber um número, alguém monta relatório na mão.",
-        body: "Financeiro, CRM, estoque, cada um num lugar diferente. A resposta existe, só não está pronta — e quando fica, já é informação de ontem.",
+        body: "Financeiro, CRM, estoque, cada um num lugar diferente. A resposta existe, só não está pronta, e quando fica já é informação de ontem.",
       },
       {
         title: "Você já ouviu “o sistema não faz isso”.",
@@ -232,17 +232,17 @@ export const devContent: Content = {
       },
     ],
     fecho:
-      "Nenhuma dessas situações é falta de esforço — é falta de uma ferramenta feita para você. O SaaS pronto resolve a média e deixa o resto na planilha. O freelancer entrega e some. A fábrica de software fecha o escopo e vai embora. O que o empresário precisa é de alguém que entenda o negócio, construa a tecnologia certa e continue presente enquanto a empresa cresce.",
+      "Nenhuma dessas situações é falta de esforço: é falta de uma ferramenta feita para você. O SaaS pronto resolve a média e deixa o resto na planilha. O freelancer entrega e some. A fábrica de software fecha o escopo e vai embora. O que o empresário precisa é de alguém que entenda o negócio, construa a tecnologia certa e continue presente enquanto a empresa cresce.",
   },
 
   // a aba deixa de ser "tipo de agente" e passa a ser "tipo de sistema"
   agentes: {
     eyebrow: "O QUE CONSTRUÍMOS",
     title: ["Do processo na planilha para o", "sistema em produção."],
-    lead: "Cada projeto começa entendendo como sua empresa trabalha hoje. O software vem depois — e vem no formato que o processo pede.",
+    lead: "Cada projeto começa entendendo como sua empresa trabalha hoje. O software vem depois, e vem no formato que o processo pede.",
     tabs: [
       {
-        icon: "🏗️",
+        icon: "building",
         label: "Sistema interno",
         title: "O ERP que cabe na sua operação",
         steps: [
@@ -253,7 +253,7 @@ export const devContent: Content = {
         ],
       },
       {
-        icon: "🌐",
+        icon: "globe",
         label: "Portal do cliente",
         title: "Seu cliente se atende sozinho",
         steps: [
@@ -264,7 +264,7 @@ export const devContent: Content = {
         ],
       },
       {
-        icon: "📱",
+        icon: "phone",
         label: "App mobile",
         title: "A operação que acontece fora do escritório",
         steps: [
@@ -275,7 +275,7 @@ export const devContent: Content = {
         ],
       },
       {
-        icon: "🔌",
+        icon: "plug",
         label: "Integrações",
         title: "Seus sistemas parando de se ignorar",
         steps: [
@@ -286,7 +286,7 @@ export const devContent: Content = {
         ],
       },
       {
-        icon: "📊",
+        icon: "chart",
         label: "Dashboards",
         title: "O número certo, agora",
         steps: [
@@ -297,7 +297,7 @@ export const devContent: Content = {
         ],
       },
       {
-        icon: "🚀",
+        icon: "rocket",
         label: "Produto digital",
         title: "Transforma processo interno em receita",
         steps: [
@@ -336,7 +336,7 @@ export const devContent: Content = {
         { task: "Integração com o ERP", sprint: "Sprint 4", status: "Concluído" },
         { task: "Portal do cliente v2", sprint: "Sprint 5", status: "Em andamento" },
         { task: "Dashboard de métricas", sprint: "Sprint 5", status: "Backlog" },
-        { task: "App de campo — offline", sprint: "Sprint 6", status: "Backlog" },
+        { task: "App de campo offline", sprint: "Sprint 6", status: "Backlog" },
       ],
     },
   },
@@ -347,7 +347,7 @@ export const devContent: Content = {
       "O problema raramente é técnico.",
       "É construir a coisa errada primeiro.",
     ],
-    lead: "Toda operação tem uma Etapa Limitante — um único gargalo que segura tudo. Construir software para qualquer outra parte antes disso é gastar bem em algo que não muda o resultado.",
+    lead: "Toda operação tem uma Etapa Limitante: um único gargalo que segura tudo. Construir software para qualquer outra parte antes disso é gastar bem em algo que não muda o resultado.",
     maioria: {
       tag: "COMO A MAIORIA FAZ",
       rows: [
@@ -356,7 +356,7 @@ export const devContent: Content = {
         { area: "Financeiro", note: "ok", gargalo: false },
         { area: "Suporte", note: "ok", gargalo: false },
       ],
-      desc: "Digitaliza Vendas, Financeiro e Suporte. A Operação — o gargalo real — continua travando tudo. Resultado: sistema bonito, empresa no mesmo ritmo.",
+      desc: "Digitaliza Vendas, Financeiro e Suporte. A Operação, o gargalo real, continua travando tudo. Resultado: sistema bonito, empresa no mesmo ritmo.",
     },
     envs: {
       tag: "MÉTODO ENVS",
@@ -371,14 +371,14 @@ export const devContent: Content = {
     defasagem: {
       tag: "CONCEITO-CHAVE",
       title: "Defasagem de Tempo: por que a maioria desiste antes do resultado.",
-      p1: "Entre colocar um sistema no ar e ver o ganho na operação existe um intervalo — a equipe precisa aprender, o processo precisa assentar. Quem não entende isso troca de rumo cedo demais.",
-      p2: "A envs mapeia essa defasagem antes de escrever a primeira linha. Sabemos quando cada entrega vai produzir efeito — e combinamos isso com você antes de começar.",
+      p1: "Entre colocar um sistema no ar e ver o ganho na operação existe um intervalo: a equipe precisa aprender, o processo precisa assentar. Quem não entende isso troca de rumo cedo demais.",
+      p2: "A envs mapeia essa defasagem antes de escrever a primeira linha. Sabemos quando cada entrega vai produzir efeito, e combinamos isso com você antes de começar.",
     },
     steps: [
       {
         n: "1",
         title: "Identificar",
-        desc: "Mapeamos qual etapa da sua operação está freando todo o restante. Não o que parece ser — o que realmente é.",
+        desc: "Mapeamos qual etapa da sua operação está freando todo o restante. Não o que parece ser, e sim o que realmente é.",
       },
       {
         n: "2",
@@ -388,7 +388,7 @@ export const devContent: Content = {
       {
         n: "3",
         title: "Expandir",
-        desc: "Com o gargalo resolvido, avançamos para o resto do sistema — agora com o processo já validado na prática.",
+        desc: "Com o gargalo resolvido, avançamos para o resto do sistema, agora com o processo já validado na prática.",
       },
     ],
   },
@@ -447,7 +447,7 @@ export const devContent: Content = {
       cargo: "Fundador",
       empresa: "Meduca",
       texto:
-        "Eu tinha o produto na cabeça e nenhuma linha de código. Em seis meses estava no ar com usuário pagante. O que mais me pegou não foi a entrega — foi que eles continuaram depois dela.",
+        "Eu tinha o produto na cabeça e nenhuma linha de código. Em seis meses estava no ar com usuário pagante. O que mais me pegou não foi a entrega, foi que eles continuaram depois dela.",
       verificado: false,
     },
   ],
@@ -463,8 +463,8 @@ export const devContent: Content = {
     title: "Eles tinham a ideia. A gente construiu o produto. Resultado?",
     titleHighlight: "+50 mil usuários simultâneos.",
     paragraphs: [
-      "Em 2024, a Meduca chegou até a envs com um produto ambicioso: uma plataforma de educação para preparar alunos do interior do Nordeste para vestibulares e concursos — em um mercado que ainda rodava em grupo de WhatsApp, PDF e planilha.",
-      "Nenhum sistema pronto atendia: o modelo de turma, a correção e o acompanhamento eram específicos demais. Construímos sob medida, colocamos o MVP no ar em 6 meses e evoluímos para uma arquitetura completa — front-end e back-end à altura do que a plataforma precisava suportar em semana de prova.",
+      "Em 2024, a Meduca chegou até a envs com um produto ambicioso: uma plataforma de educação para preparar alunos do interior do Nordeste para vestibulares e concursos, em um mercado que ainda rodava em grupo de WhatsApp, PDF e planilha.",
+      "Nenhum sistema pronto atendia: o modelo de turma, a correção e o acompanhamento eram específicos demais. Construímos sob medida, colocamos o MVP no ar em 6 meses e evoluímos para uma arquitetura completa, com front-end e back-end à altura do que a plataforma precisava suportar em semana de prova.",
     ],
     resultado: "Resultado: a plataforma sustentou mais de 50 mil usuários simultâneos.",
     antes:
@@ -479,7 +479,7 @@ export const devContent: Content = {
   statement: {
     lead: "A envs constrói",
     highlight: "o software que a sua operação precisava",
-    rest: "— integra o que você já usa, substitui a planilha crítica e continua evoluindo enquanto o negócio cresce.",
+    rest: "e integra o que você já usa, substitui a planilha crítica e continua evoluindo enquanto o negócio cresce.",
   },
 
   integraTitle: "Conversa com o que você já tem",

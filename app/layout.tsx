@@ -21,14 +21,14 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://envs.com.br"),
   // acompanha a copy que a home renderiza; desalinhar isso faz o Google e o
   // compartilhamento anunciarem uma página diferente da que abre
-  title: "envs — Software sob medida para empresas",
+  title: "envs | Software sob medida para empresas",
   description:
     "Pare de adaptar sua operação ao sistema. A envs constrói o software que a sua empresa realmente usa: sistemas internos, portais, apps e integrações.",
   // sem canonical o Google escolhe sozinho qual endereço é o oficial quando
   // encontra a mesma página por caminhos diferentes
   alternates: { canonical: "/" },
   openGraph: {
-    title: "envs — Software sob medida para empresas",
+    title: "envs | Software sob medida para empresas",
     description:
       "ERP que não fecha, planilha que virou processo, integração que ninguém mantém. A envs constrói o software que a sua empresa realmente usa.",
     url: "https://envs.com.br",
@@ -40,13 +40,13 @@ export const metadata: Metadata = {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "envs — Pare de adaptar sua operação ao sistema pronto. Construa o seu.",
+        alt: "envs | Pare de adaptar sua operação ao sistema pronto. Construa o seu.",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "envs — Software sob medida para empresas",
+    title: "envs | Software sob medida para empresas",
     description:
       "ERP que não fecha, planilha que virou processo, integração que ninguém mantém. A envs constrói o software que a sua empresa realmente usa.",
     images: ["/og.png"],

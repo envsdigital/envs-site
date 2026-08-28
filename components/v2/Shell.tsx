@@ -63,12 +63,12 @@ export function Rail() {
 const LOG = [
   "nota fiscal #8842 emitida",
   "conciliação bancária concluída",
-  "régua de cobrança disparada — 34 clientes",
-  "contrato analisado — 2 cláusulas sinalizadas",
-  "follow-up enviado — oportunidade #2291",
-  "estoque verificado — pedido liberado",
+  "régua de cobrança disparada · 34 clientes",
+  "contrato analisado · 2 cláusulas sinalizadas",
+  "follow-up enviado · oportunidade #2291",
+  "estoque verificado · pedido liberado",
   "relatório executivo gerado",
-  "CRM sincronizado — 118 registros",
+  "CRM sincronizado · 118 registros",
 ];
 
 /** Thin ticker strip: the agent is working while you read. */

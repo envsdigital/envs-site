@@ -3,7 +3,7 @@ import V4Page from "@/components/v4/Page";
 import { devContent } from "@/data/site-dev";
 
 export const metadata: Metadata = {
-  title: "envs — Software sob medida para empresas",
+  title: "envs | Software sob medida para empresas",
   description:
     "Pare de adaptar sua operação ao sistema. A envs constrói o software que a sua empresa realmente usa: sistemas internos, portais, apps e integrações.",
 };

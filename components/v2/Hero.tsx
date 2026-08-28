@@ -8,7 +8,7 @@ const RUN = [
   { t: "cmd", s: "envs run --agent financeiro --watch" },
   { t: "dim", s: "conectando: ERP · CRM · banco · e-mail" },
   { t: "ok", s: "12 faturas vencendo em 48h identificadas" },
-  { t: "ok", s: "cruzado com CRM — 3 clientes de alto risco" },
+  { t: "ok", s: "cruzado com CRM · 3 clientes de alto risco" },
   { t: "ok", s: "régua de cobrança disparada" },
   { t: "warn", s: "exceção: cliente #4471 em negociação → pulado" },
   { t: "ok", s: "conciliação bancária concluída" },
@@ -42,7 +42,7 @@ function AgentTerminal() {
         <span className="h-2 w-2 rounded-full bg-white/15" />
         <span className="h-2 w-2 rounded-full bg-white/15" />
         <span className="h-2 w-2 rounded-full bg-white/15" />
-        <span className="ml-2 font-mono text-[10px] text-fg/35">agente_financeiro — envs</span>
+        <span className="ml-2 font-mono text-[10px] text-fg/35">agente_financeiro · envs</span>
       </div>
       <div className="h-[268px] space-y-1.5 overflow-hidden p-4 font-mono text-[11px] leading-relaxed sm:text-xs">
         {RUN.slice(0, n).map((l, i) => (

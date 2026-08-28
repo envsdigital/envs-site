@@ -91,7 +91,7 @@ export default function Virada() {
                     {c.items.map((it) => (
                       <li key={it} className="flex items-start gap-2.5 text-sm text-fg/75">
                         <span className={`mt-0.5 font-mono text-[10px] ${c.now ? "text-lime" : "text-fg/30"}`}>
-                          {c.now ? "✓" : "—"}
+                          {c.now ? "✓" : "·"}
                         </span>
                         {it}
                       </li>

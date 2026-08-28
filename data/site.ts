@@ -16,7 +16,7 @@ export const hero = {
 export const virada = {
   eyebrow: "A VIRADA",
   title: ["A IA parou de responder.", "Começou a executar."],
-  lead: "A maioria das empresas brasileiras ainda está presa no chatbot. O que está emergindo agora é outra coisa — e quem não perceber isso vai pagar caro.",
+  lead: "A maioria das empresas brasileiras ainda está presa no chatbot. O que está emergindo agora é outra coisa, e quem não perceber isso vai pagar caro.",
   cards: [
     {
       period: "PRIMEIRA ONDA",
@@ -35,9 +35,9 @@ export const virada = {
       now: false,
     },
     {
-      period: "TERCEIRA ONDA — AGORA",
+      period: "TERCEIRA ONDA: AGORA",
       title: "IA que Executa",
-      desc: "Agentes autônomos que observam, decidem e agem — como um humano, mas sem parar.",
+      desc: "Agentes autônomos que observam, decidem e agem como um humano, mas sem parar.",
       items: ["Opera softwares e sistemas", "Toma decisões com contexto", "Adapta o comportamento"],
       kicker: "É aqui que está o dinheiro.",
       now: true,
@@ -134,7 +134,7 @@ export const frentes = {
   f1: {
     tag: "FRENTE 01",
     title: "Implantação de Agentes de IA",
-    desc: "Agentes autônomos que operam seus processos sem intervenção humana. Financeiro, jurídico, comercial — rodando 24h.",
+    desc: "Agentes autônomos que operam seus processos sem intervenção humana. Financeiro, jurídico, comercial, rodando 24h.",
     terminal: [
       "agente_financeiro.run()",
       "Nota fiscal emitida automaticamente",
@@ -202,7 +202,7 @@ export const dores = {
     },
   ],
   fecho:
-    "Enquanto você gerencia esse caos, alguém no seu mercado não está. Alguém já está colocando IA para operar o que você ainda faz na mão. Toda semana que passa, essa vantagem cresce. Nenhuma dessas situações é falta de esforço — é falta do parceiro certo. O SaaS pronto resolve 70% e deixa o resto na planilha. O freelancer entrega e some. A software house fecha o escopo e vai embora. É exatamente isso que o empresário precisa: alguém que entende o negócio, constrói a tecnologia certa, coloca agentes para operar de verdade e continua presente enquanto a empresa cresce.",
+    "Enquanto você gerencia esse caos, alguém no seu mercado não está. Alguém já está colocando IA para operar o que você ainda faz na mão. Toda semana que passa, essa vantagem cresce. Nenhuma dessas situações é falta de esforço: é falta do parceiro certo. O SaaS pronto resolve 70% e deixa o resto na planilha. O freelancer entrega e some. A software house fecha o escopo e vai embora. É exatamente isso que o empresário precisa: alguém que entende o negócio, constrói a tecnologia certa, coloca agentes para operar de verdade e continua presente enquanto a empresa cresce.",
 };
 
 export const agentes = {
@@ -211,7 +211,7 @@ export const agentes = {
   lead: "Um agente autônomo não conversa com o software. Ele opera o software, da mesma forma que um humano faria, mas sem parar, sem errar por cansaço, sem precisar de férias.",
   tabs: [
     {
-      icon: "💰",
+      icon: "wallet",
       label: "Financeiro",
       title: "Agente que cuida do seu caixa",
       steps: [
@@ -222,7 +222,7 @@ export const agentes = {
       ],
     },
     {
-      icon: "⚙️",
+      icon: "gear",
       label: "Operação",
       title: "Agente que cuida dos seus processos",
       steps: [
@@ -233,7 +233,7 @@ export const agentes = {
       ],
     },
     {
-      icon: "📈",
+      icon: "trending",
       label: "Comercial",
       title: "Agente que cuida das suas vendas",
       steps: [
@@ -244,7 +244,7 @@ export const agentes = {
       ],
     },
     {
-      icon: "⚖️",
+      icon: "scale",
       label: "Jurídico",
       title: "Agente que lê contratos por você",
       steps: [
@@ -255,7 +255,7 @@ export const agentes = {
       ],
     },
     {
-      icon: "💻",
+      icon: "code",
       label: "Produto Digital",
       title: "Transforma processo interno em receita",
       steps: [
@@ -266,7 +266,7 @@ export const agentes = {
       ],
     },
     {
-      icon: "🤖",
+      icon: "bot",
       label: "Qualquer Processo",
       title: "Se existe trabalho manual repetitivo, existe um agente para ele.",
       steps: [
@@ -303,7 +303,7 @@ export const visibilidade = {
   lead: "Backlog 100% compartilhado e aberto 24/7. Você sabe exatamente o que está sendo feito, o que vem a seguir e quanto foi entregue.",
   features: [
     { title: "Backlog público", desc: "Acesse qualquer tarefa, status e prioridade a qualquer hora." },
-    { title: "Ciclos curtos de entrega", desc: "Sprints semanais com entregas visíveis — sem esperar meses para ver resultado." },
+    { title: "Ciclos curtos de entrega", desc: "Sprints semanais com entregas visíveis, sem esperar meses para ver resultado." },
     { title: "Alinhamento quinzenal", desc: "ZIP Call: reunião compacta para decidir o próximo passo. Sem enrolação." },
   ],
   board: {
@@ -321,7 +321,7 @@ export const visibilidade = {
 export const falha = {
   eyebrow: "POR QUE A MAIORIA FALHA",
   title: ["O problema não é falta de automação.", "É automatizar as coisas erradas primeiro."],
-  lead: "Toda operação tem uma Etapa Limitante — um único gargalo que segura tudo. Quem não resolve isso primeiro, resolve nada.",
+  lead: "Toda operação tem uma Etapa Limitante: um único gargalo que segura tudo. Quem não resolve isso primeiro, resolve nada.",
   maioria: {
     tag: "COMO A MAIORIA FAZ",
     rows: [
@@ -330,7 +330,7 @@ export const falha = {
       { area: "Financeiro", note: "ok", gargalo: false },
       { area: "Suporte", note: "ok", gargalo: false },
     ],
-    desc: "Automatiza Vendas, Financeiro e Suporte. A Operação — o gargalo real — continua travando tudo. Resultado: dinheiro jogado fora.",
+    desc: "Automatiza Vendas, Financeiro e Suporte. A Operação, o gargalo real, continua travando tudo. Resultado: dinheiro jogado fora.",
   },
   envs: {
     tag: "MÉTODO ENVS",
@@ -345,13 +345,13 @@ export const falha = {
   defasagem: {
     tag: "CONCEITO-CHAVE",
     title: "Defasagem de Tempo: por que a maioria não vê resultado.",
-    p1: "Entre fazer uma mudança e ver o resultado dela existe um intervalo — a defasagem. Quem não entende isso desiste cedo demais, ou pisa no acelerador na hora errada.",
-    p2: "A envs mapeia essa defasagem antes de qualquer intervenção. Sabemos exatamente quando cada ação vai produzir resultado — e comunicamos isso para você.",
+    p1: "Entre fazer uma mudança e ver o resultado dela existe um intervalo: a defasagem. Quem não entende isso desiste cedo demais, ou pisa no acelerador na hora errada.",
+    p2: "A envs mapeia essa defasagem antes de qualquer intervenção. Sabemos exatamente quando cada ação vai produzir resultado, e comunicamos isso para você.",
   },
   steps: [
-    { n: "1", title: "Identificar", desc: "Mapeamos qual etapa da sua operação está freando todo o restante. Não o que parece ser — o que realmente é." },
+    { n: "1", title: "Identificar", desc: "Mapeamos qual etapa da sua operação está freando todo o restante. Não o que parece ser, e sim o que realmente é." },
     { n: "2", title: "Explorar", desc: "Esgotamos tudo que é possível fazer no gargalo antes de tocar em qualquer outra coisa." },
-    { n: "3", title: "Elevar", desc: "Só então expandimos para o restante do sistema — com o gargalo resolvido, tudo o mais flui naturalmente." },
+    { n: "3", title: "Elevar", desc: "Só então expandimos para o restante do sistema. Com o gargalo resolvido, tudo o mais flui naturalmente." },
   ],
 };
 
@@ -375,7 +375,7 @@ export const escritorio = {
 export const garantiaFinal = {
   eyebrow: "NOSSA GARANTIA",
   title: ["O risco é nosso tanto quanto é seu.", "Resultado ou devolução. Simples assim."],
-  body: "Contratar errado no mercado de tech não é só perder dinheiro. É perder tempo — e no mundo dos negócios, tempo perdido é mercado que o seu concorrente tomou. Se em qualquer etapa você sentir que não estamos entregando o que prometemos, corrigimos o rumo ou devolvemos seu investimento. Sem burocracia. Sem letras miúdas.",
+  body: "Contratar errado no mercado de tech não é só perder dinheiro. É perder tempo, e no mundo dos negócios tempo perdido é mercado que o seu concorrente tomou. Se em qualquer etapa você sentir que não estamos entregando o que prometemos, corrigimos o rumo ou devolvemos seu investimento. Sem burocracia. Sem letras miúdas.",
   quote: "Quem tem skin in the game não precisa de contrato para levar seu negócio a sério.",
 };
 

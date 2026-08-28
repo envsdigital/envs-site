@@ -521,7 +521,7 @@ export function Virada() {
               <li key={it}>
                 <Caption className={c.now ? "text-fg/80" : "text-fg/40"}>
                   <span className={`mr-3 ${c.now ? "text-lime" : "text-fg/25"}`}>
-                    {c.now ? "✓" : "—"}
+                    {c.now ? "✓" : "·"}
                   </span>
                   {it}
                 </Caption>

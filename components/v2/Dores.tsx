@@ -17,7 +17,7 @@ export default function Dores() {
         <div>
           <h2 className="display text-[clamp(1.9rem,4.2vw,3.2rem)]">{dores.title}</h2>
           <p className="mt-5 font-mono text-[11px] uppercase tracking-wider text-fg/35">
-            marque o que acontece na sua — {checked.length}/6
+            marque o que acontece na sua · {checked.length}/6
           </p>
         </div>
         <div className="lg:pt-4">
@@ -26,7 +26,7 @@ export default function Dores() {
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-lime">diagnóstico</p>
               <p className="mt-3 text-sm leading-relaxed text-fg/85">
                 {checked.length >= 5
-                  ? "Cinco ou mais. Sua operação não tem um problema pontual — tem um gargalo estrutural. É exatamente aqui que a envs entra."
+                  ? "Cinco ou mais. Sua operação não tem um problema pontual: tem um gargalo estrutural. É exatamente aqui que a envs entra."
                   : "Três ou mais sintomas. Não é falta de esforço. É falta do parceiro certo."}
               </p>
             </div>
