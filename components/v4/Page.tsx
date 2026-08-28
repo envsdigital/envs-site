@@ -26,7 +26,9 @@ export default function V4Page({ content = defaultContent }: { content?: Content
       <Hud />
       <Cursor />
       <main
-        className="relative z-10"
+        // clip, não hidden: o sangramento das linhas grandes deve ser cortado
+        // na borda sem virar barra de rolagem, e `clip` não cria um scrollport
+        className="relative z-10 overflow-x-clip"
         style={{ fontFamily: "var(--font-inter), ui-sans-serif, system-ui, sans-serif" }}
       >
         <Abertura />
