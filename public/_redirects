@@ -1,5 +1,9 @@
 # Redirects do Cloudflare Pages. Um por linha: origem, destino, código.
-
-# www para o domínio raiz, para o site ter um endereço só.
-# Depende de www.envs.com.br estar adicionado como domínio no projeto Pages.
-https://www.envs.com.br/* https://envs.com.br/:splat 301
+#
+# A origem aqui tem que ser um CAMINHO. Redirect entre hosts (www para o
+# domínio raiz, por exemplo) não funciona neste arquivo — o Pages só casa
+# o path, então uma regra escrita como "https://www.envs.com.br/*" é
+# ignorada em silêncio. Esse caso vive numa Regra de Redirecionamento da
+# zona, no painel: Regras → Redirecionamento.
+#
+# Sem redirects de caminho por enquanto.
