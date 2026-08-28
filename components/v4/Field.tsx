@@ -82,6 +82,16 @@ export default function Field() {
     const DEPTH = ROWS * SPACING;
     const EYE = 70;                 // altura da câmera sobre o terreno
 
+    /* O mar: partículas em volume ao redor da câmera, não um chão.
+       É o que dá o que atravessar — o terreno sozinho só passa por baixo. */
+    const sea = Array.from({ length: small ? 340 : 820 }, () => ({
+      x: (Math.random() - 0.5) * 3600,
+      y: (Math.random() - 0.5) * 2400,
+      z: Math.random() * DEPTH,
+      s: Math.random() * 0.8 + 0.4,
+      peri: Math.random() < 0.34,
+    }));
+
     // poeira ambiente
     const dust = Array.from({ length: small ? 240 : 520 }, () => ({
       x: (Math.random() - 0.5) * COLS * SPACING * 1.3,
@@ -120,6 +130,7 @@ export default function Field() {
       Math.sin((x + z) * 0.0026 + t * 0.05) * 26;
 
     let camZ = 0;
+    let vel = 0;      // velocidade da câmera, com inércia
     let targetZ = 0;
     let targetVor = 0;   // 0 = terreno plano, 1 = vórtice
     let vor = 0;
@@ -127,7 +138,9 @@ export default function Field() {
       const max = document.body.scrollHeight - window.innerHeight;
       const p = max > 0 ? window.scrollY / max : 0;
       // a câmera percorre várias voltas do terreno ao longo da página
-      targetZ = p * DEPTH * 3.1;
+      // curso longo de propósito: sem distância a percorrer a velocidade
+      // nunca chega a subir e não há aceleração pra sentir
+      targetZ = p * DEPTH * 5.4;
       // no trecho final o terreno colapsa numa espiral
       targetVor = Math.min(1, Math.max(0, (p - 0.82) / 0.13));
     };
@@ -188,8 +201,15 @@ export default function Field() {
       const t = reduce ? 4 : (performance.now() - t0) / 1000;
 
       // suaviza avanço da câmera e resposta do cursor
-      const dz = (targetZ - camZ) * 0.075;
-      camZ += dz;
+      /* Câmera com massa: o scroll não move a câmera, puxa ela.
+         A velocidade tem inércia própria, então uma rolagem rápida abre
+         distância e a câmera dispara atrás; parar não freia na hora, ela
+         desacelera. É daí que vem a sensação de navegar, e não de arrastar. */
+      const pull = (targetZ - camZ) * 0.035;
+      vel += (pull - vel) * 0.09;
+      camZ += vel;
+      const speed = Math.min(1, Math.abs(vel) / 40);
+
       vor += (targetVor - vor) * 0.05;
       mx += (tmx - mx) * 0.045;
       my += (tmy - my) * 0.045;
@@ -205,7 +225,8 @@ export default function Field() {
         if (now - ripples[i].t0 > 1800) ripples.splice(i, 1);
       }
 
-      const focal = h * 0.86;
+      // a lente abre com a velocidade: o campo passa rasgando pelas bordas
+      const focal = h * (0.86 - speed * 0.2);
       const cx = w / 2 + mx * 46;
       const cy = h * 0.52 + my * 26;
 
@@ -332,8 +353,9 @@ export default function Field() {
               // aberração cromática nas bordas
               const off = (sx - cx) / (w / 2);
               if (Math.abs(off) > 0.55 && size > 1.1) {
-                // sem o teto o ganho passa de 1 na borda e o terreno vira confete
-                const g = Math.min(1, (Math.abs(off) - 0.55) * 2.6);
+                // sem o teto o ganho passa de 1 na borda e o terreno vira
+                // confete; a velocidade escancara a franja da lente
+                const g = Math.min(1, (Math.abs(off) - 0.55) * 2.6) * (1 + speed);
                 c2.fillStyle = `rgba(255,80,60,${a * 0.45 * g})`;
                 c2.fillRect(sx + off * 3.2, sy, size, size);
                 c2.fillStyle = `rgba(70,140,255,${a * 0.45 * g})`;
@@ -379,6 +401,35 @@ export default function Field() {
         ctx.fillRect(sx, sy, size, size);
       }
 
+      /* ---- 3b. o mar de partículas ----
+         Cada uma é desenhada como um traço de onde estava até onde está.
+         Parada, o traço tem comprimento zero e o cap redondo a resolve como
+         ponto; acelerando, ela vira risco. É o mesmo código nos dois casos. */
+      // com teto: sem ele o risco atravessa a tela inteira e come a copy
+      const trail = Math.min(210, Math.abs(vel) * 4.2);
+      ctx.lineCap = "round";
+      for (const p of sea) {
+        const z = ((p.z - camZ) % DEPTH + DEPTH) % DEPTH;
+        if (z < 40) continue;
+        const fade = 1 - z / DEPTH;
+        if (fade < 0.03) continue;
+
+        const s1 = focal / z;
+        const s0 = focal / (z + trail);
+        const x1 = cx + p.x * s1, y1 = cy + p.y * s1;
+        if (x1 < -140 || x1 > w + 140 || y1 < -140 || y1 > h + 140) continue;
+
+        const a = fade * fade * (0.2 + speed * 0.3) * p.s;
+        if (a < 0.015) continue;
+        const c = p.peri ? PERI : LIME;
+        ctx.strokeStyle = `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+        ctx.lineWidth = Math.min(3.4, Math.max(0.8, s1 * 2.4 * p.s));
+        ctx.beginPath();
+        ctx.moveTo(cx + p.x * s0, cy + p.y * s0);
+        ctx.lineTo(x1, y1);
+        ctx.stroke();
+      }
+
       /* ---- 4. poeira ambiente ---- */
       for (const d of dust) {
         const z = ((d.z - camZ) % DEPTH + DEPTH) % DEPTH;
@@ -412,8 +463,9 @@ export default function Field() {
          volta ao modo normal: em "lighter" a névoa clarearia em vez de
          escurecer, e o clear do frame seguinte somaria em vez de limpar. */
       ctx.globalCompositeOperation = "source-over";
-      // no vórtice não há horizonte pra escurecer: a cena é centrada
-      const k = 1 - vor;
+      // no vórtice não há horizonte pra escurecer: a cena é centrada.
+      // Na velocidade a névoa recua, senão o túnel que se abre fica tampado.
+      const k = (1 - vor) * (1 - speed * 0.45);
       const fog = ctx.createLinearGradient(0, 0, 0, h);
       fog.addColorStop(0, `rgba(5,5,5,${0.96 * k})`);
       fog.addColorStop(0.34, `rgba(5,5,5,${0.35 * k})`);
@@ -426,7 +478,7 @@ export default function Field() {
          dá a sensação de atravessar o campo. */
       fctx.globalCompositeOperation = "lighter";
       for (const p of near) {
-        p.z -= 0.55 + dz * 0.9;
+        p.z -= 0.55 + vel * 0.9;
         if (p.z < 30) {
           p.z = 500;
           p.x = (Math.random() - 0.5) * 2400;
