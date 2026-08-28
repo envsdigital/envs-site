@@ -63,11 +63,21 @@ export function ParticleText({
     const build = () => {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       W = host.offsetWidth;
+
+      // a família precisa vir resolvida: `var(--font-inter)` invalida a string
+      // inteira em canvas e o desenho cai no padrão de 10px
+      const fam = getComputedStyle(host).fontFamily || "sans-serif";
+
+      /* Mede a frase de verdade em vez de supor 0.56em por caractere. A média
+         erra para mais em frases com muitas maiúsculas ou acentos, e o que
+         sobra passa da borda e é cortado. */
+      const probe = document.createElement("canvas").getContext("2d");
+      if (!probe) return;
+      probe.font = `500 100px ${fam}`;
+      const w100 = probe.measureText(text).width || 1;
+      const fs = Math.min(max * 16, (W * bleed * 100) / w100);
+
       // altura da caixa acompanha a fonte, com folga pra acentos e descidas
-      const fs = Math.min(
-        max * 16,
-        (W * bleed) / (text.length * 0.56)
-      );
       H = Math.ceil(fs * 1.32);
       host.style.height = `${H}px`;
       canvas.width = W * dpr;
@@ -83,9 +93,6 @@ export function ParticleText({
       octx.fillStyle = "#fff";
       octx.textBaseline = "middle";
       octx.textAlign = align === "right" ? "right" : align === "center" ? "center" : "left";
-      // a família precisa vir resolvida: `var(--font-inter)` invalida a string
-      // inteira em canvas e o desenho cai no padrão de 10px
-      const fam = getComputedStyle(host).fontFamily || "sans-serif";
       octx.font = `500 ${fs}px ${fam}`;
       octx.fillText(text, align === "right" ? W : align === "center" ? W / 2 : 0, H / 2);
 

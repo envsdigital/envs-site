@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/anim";
 import { useContent } from "@/components/v3/Content";
 import { Magnetic } from "@/components/v4/Cursor";
@@ -29,19 +29,62 @@ const reduced = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /**
- * Tamanho de fonte derivado do comprimento da própria frase, para a linha
- * encher a largura da tela sem cortar.
- *
- * Um `13vw` fixo com `whitespace-nowrap` corta frases longas nos dois lados —
- * "Pare de contratar pessoas" virava "are de contratar pessoa". Aqui a fonte
- * encolhe conforme a frase cresce: ~0.56em é a largura média de caractere do
- * Inter medium nesta faixa, então `100vw / (chars * 0.56)` é o tamanho que
- * preenche a linha. `bleed` acima de 1 deixa sangrar de propósito.
+ * Estimativa em vw, usada só até o componente medir de verdade.
+ * ~0.56em é a largura média de caractere do Inter medium nesta faixa.
  */
 function fitSize(text: string, bleed = 1, max = 11) {
   const chars = Math.max(text.length, 1);
   const vw = (bleed * 100) / (chars * 0.56);
   return `clamp(1.4rem, ${vw.toFixed(2)}vw, ${max}rem)`;
+}
+
+/**
+ * Tamanho de fonte que faz a linha caber na largura disponível.
+ *
+ * A conta em vw errava por dois motivos somados: `100vw` é a viewport
+ * inteira, sem descontar o respiro lateral do bloco, e em navegador com
+ * barra de rolagem visível `vw` ainda inclui a barra. O texto passava da
+ * borda e o `overflow-x: clip` comia o pedaço que sobrava — daí letras
+ * cortadas nas laterais.
+ *
+ * Aqui mede-se a largura real do contêiner e a largura real da frase
+ * (via measureText, que conhece a fonte de verdade em vez de supor uma
+ * média por caractere), e a fonte sai da razão entre as duas.
+ */
+function useFitSize(
+  ref: React.RefObject<HTMLDivElement | null>,
+  text: string | undefined,
+  bleed: number,
+  max: number
+) {
+  const [px, setPx] = useState<number | null>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !text) return;
+
+    const cv = document.createElement("canvas");
+    const c2 = cv.getContext("2d");
+    if (!c2) return;
+
+    const calc = () => {
+      const fam = getComputedStyle(el).fontFamily || "sans-serif";
+      c2.font = `500 100px ${fam}`;
+      const w100 = c2.measureText(text).width;
+      if (!w100 || !el.clientWidth) return;
+      setPx(Math.min(max * 16, (el.clientWidth * bleed * 100) / w100));
+    };
+
+    // a fonte real muda a medida; antes dela a conta sai errada
+    if (document.fonts?.ready) document.fonts.ready.then(calc);
+    else calc();
+
+    const ro = new ResizeObserver(calc);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [ref, text, bleed, max]);
+
+  return px;
 }
 
 /**
@@ -265,17 +308,23 @@ function Huge({
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  // `depth` amplia até 1+depth; descontar aqui faz a linha caber no pico da
+  // escala em vez de estourar a borda quando o scroll a aproxima
+  const px = useFitSize(ref, fit, bleed / (1 + depth), max);
 
   useEffect(() => {
     const el = ref.current;
     if (!el || (!drift && !depth)) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    /* Deslocamento em pixels, não em porcentagem. Em % o gesto valia 3% da
+       largura do bloco — ~55px numa tela larga, bem mais que o respiro
+       lateral — e a linha saía pela borda. Em px cabe dentro do padding. */
     const tw = gsap.fromTo(
       el,
-      { xPercent: -drift, scale: 1 - depth, opacity: depth ? 0.45 : 1 },
+      { x: -drift * 6, scale: 1 - depth, opacity: depth ? 0.45 : 1 },
       {
-        xPercent: drift,
+        x: drift * 6,
         scale: 1 + depth,
         opacity: 1,
         ease: "none",
@@ -293,7 +342,31 @@ function Huge({
   return (
     <div
       ref={ref}
-      style={fit ? { fontSize: fitSize(fit, bleed, max) } : undefined}
+      style={{
+        // o clamp em vw é só o primeiro quadro, até a medição real chegar
+        ...(fit ? { fontSize: px != null ? `${px}px` : fitSize(fit, bleed, max) } : null),
+        /* Ancora a escala na borda do alinhamento. O bloco ocupa a largura
+           toda; escalando pelo centro, a borda esquerda de um bloco de 1841px
+           ia para -54px e levava o texto junto para fora da tela. Ancorado,
+           ele cresce só para dentro. */
+        transformOrigin:
+          align === "right" ? "100% 50%" : align === "center" ? "50% 50%" : "0% 50%",
+        /* Linha que quebra não tem como ser dimensionada pelo comprimento,
+           então a caixa é que encolhe: a 100/(1+depth)% ela volta a ocupar
+           exatamente a largura disponível no pico da escala. Nas linhas com
+           `fit` isso já vem embutido no bleed, e somar os dois encolheria
+           duas vezes. */
+        ...(!fit && depth
+          ? {
+              maxWidth: `${(100 / (1 + depth)).toFixed(2)}%`,
+              /* e a caixa encolhida precisa encostar na borda do alinhamento:
+                 largada à esquerda, a escala ancorada na direita dela crescia
+                 para fora da tela pelo outro lado. */
+              marginLeft: align === "left" ? undefined : "auto",
+              marginRight: align === "right" ? undefined : "auto",
+            }
+          : null),
+      }}
       // nowrap só quando o tamanho veio de `fit`, que é o caso em que a
       // linha foi dimensionada pra caber. Deixar nowrap na base fazia os
       // títulos longos esticarem a página na horizontal: `whitespace-normal`
@@ -372,7 +445,7 @@ export function Abertura() {
     <Beat h="min-h-screen">
       {hero.headline.map((linha, i) =>
         i === 0 ? (
-          <Huge key={linha} align="left" fit={linha} bleed={1.06} className="-ml-[3vw]">
+          <Huge key={linha} align="left" fit={linha}>
             {null}
           </Huge>
         ) : i === fim ? (
@@ -383,9 +456,7 @@ export function Abertura() {
             align="right"
             fit={linha}
             grad={GRAD}
-            bleed={1.06}
-            className="-mr-[3vw]"
-          >
+                      >
             {null}
           </Huge>
         ) : (
@@ -408,7 +479,7 @@ export function Virada() {
   return (
     <>
       <Beat>
-        <Huge align="left" drift={4} depth={0.12} fit={virada.title[0]} max={7} className="-ml-[2vw]">
+        <Huge align="left" drift={4} depth={0.12} fit={virada.title[0]} max={7}>
           {null}
         </Huge>
         <div className="mt-3">
