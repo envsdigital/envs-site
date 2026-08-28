@@ -3,11 +3,163 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/anim";
 import { useContent } from "@/components/v3/Content";
+import { Magnetic } from "@/components/v4/Cursor";
 
 /* ============================================================
    Primitivos tipográficos da v4.
    Nada de card, painel ou caixa: só texto flutuando na cena.
    ============================================================ */
+
+/** Posição do ponteiro, compartilhada por todo texto vivo da página. */
+const ptr = { x: -9999, y: -9999 };
+if (typeof window !== "undefined") {
+  window.addEventListener(
+    "pointermove",
+    (e) => {
+      ptr.x = e.clientX;
+      ptr.y = e.clientY;
+    },
+    { passive: true }
+  );
+}
+
+const reduced = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/**
+ * Tamanho de fonte derivado do comprimento da própria frase, para a linha
+ * encher a largura da tela sem cortar.
+ *
+ * Um `13vw` fixo com `whitespace-nowrap` corta frases longas nos dois lados —
+ * "Pare de contratar pessoas" virava "are de contratar pessoa". Aqui a fonte
+ * encolhe conforme a frase cresce: ~0.56em é a largura média de caractere do
+ * Inter medium nesta faixa, então `100vw / (chars * 0.56)` é o tamanho que
+ * preenche a linha. `bleed` acima de 1 deixa sangrar de propósito.
+ */
+function fitSize(text: string, bleed = 1, max = 11) {
+  const chars = Math.max(text.length, 1);
+  const vw = (bleed * 100) / (chars * 0.56);
+  return `clamp(1.7rem, ${vw.toFixed(2)}vw, ${max}rem)`;
+}
+
+/**
+ * Texto letra a letra que levanta conforme o cursor passa perto.
+ * Roda só enquanto está na tela — sem o IntersectionObserver seriam dezenas
+ * de laços por frame para texto que ninguém está vendo.
+ */
+function Letters({ text, className = "" }: { text: string; className?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || reduced()) return;
+    const kids = Array.from(el.children) as HTMLElement[];
+    let raf = 0;
+    let on = false;
+
+    const tick = () => {
+      raf = 0;
+      if (!on) return;
+      const r = el.getBoundingClientRect();
+      // o pai pode estar escalado pelo scroll; offsetLeft não sabe disso
+      const k = el.offsetWidth ? r.width / el.offsetWidth : 1;
+      for (const c of kids) {
+        const px = r.left + (c.offsetLeft + c.offsetWidth / 2) * k;
+        const py = r.top + (c.offsetTop + c.offsetHeight / 2) * k;
+        const d = Math.hypot(ptr.x - px, ptr.y - py);
+        const f = Math.max(0, 1 - d / 240);
+        const e = f * f;
+        // só transform: `color` brigaria com os títulos em gradiente
+        c.style.transform =
+          e > 0.005 ? `translateY(${(-30 * e).toFixed(2)}px) scale(${1 + 0.1 * e})` : "";
+      }
+      raf = requestAnimationFrame(tick);
+    };
+
+    const io = new IntersectionObserver(([e]) => {
+      on = e.isIntersecting;
+      if (on && !raf) raf = requestAnimationFrame(tick);
+    });
+    io.observe(el);
+
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [text]);
+
+  return (
+    <span ref={ref} aria-label={text} className={`relative inline-block ${className}`}>
+      {Array.from(text).map((ch, i) => (
+        <span
+          key={i}
+          aria-hidden
+          className="inline-block will-change-transform"
+          style={{ transition: "transform .18s cubic-bezier(.22,1,.36,1)" }}
+        >
+          {ch === " " ? " " : ch}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/\\<>[]{}#*+-";
+
+/** Legenda que se decodifica ao entrar na tela. */
+function useScramble(text: string) {
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (reduced()) {
+      el.textContent = text;
+      return;
+    }
+    let raf = 0;
+    let frame = 0;
+    const chars = Array.from(text);
+
+    const run = () => {
+      frame++;
+      // cada caractere trava depois de um número crescente de frames
+      const settled = frame / 1.6;
+      el.textContent = chars
+        .map((c, i) =>
+          c === " " || i < settled
+            ? c
+            : GLYPHS[Math.floor(Math.random() * GLYPHS.length)]
+        )
+        .join("");
+      if (settled < chars.length) raf = requestAnimationFrame(run);
+    };
+
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      io.disconnect();
+      raf = requestAnimationFrame(run);
+    });
+    io.observe(el);
+
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [text]);
+
+  return ref;
+}
+
+function Scramble({ text, className = "" }: { text: string; className?: string }) {
+  const ref = useScramble(text);
+  return (
+    <span ref={ref} className={className}>
+      {text}
+    </span>
+  );
+}
 
 /** Bloco de tela cheia. A cena 3D passa por trás. */
 function Beat({
@@ -55,12 +207,19 @@ function Huge({
   align = "left",
   drift = 0,
   depth = 0,
+  fit,
+  bleed = 1,
+  max = 11,
   className = "",
 }: {
   children: React.ReactNode;
   align?: "left" | "right" | "center";
   drift?: number;
   depth?: number;
+  /** frase pura: dimensiona pelo comprimento e anima letra a letra */
+  fit?: string;
+  bleed?: number;
+  max?: number;
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -92,9 +251,10 @@ function Huge({
   return (
     <div
       ref={ref}
+      style={fit ? { fontSize: fitSize(fit, bleed, max) } : undefined}
       className={`whitespace-nowrap font-medium leading-[0.88] tracking-[-0.035em] ${a} ${className}`}
     >
-      {children}
+      {fit ? <Letters text={fit} /> : children}
     </div>
   );
 }
@@ -157,8 +317,8 @@ export function Abertura() {
   return (
     <Beat h="min-h-[130vh]" className="justify-between">
       {/* linha 1 sangra pela esquerda */}
-      <Huge align="left" className={`${XL} -ml-[3vw]`}>
-        {hero.headline[0]}
+      <Huge align="left" fit={hero.headline[0]} bleed={1.06} className="-ml-[3vw]">
+        {null}
       </Huge>
 
       <div className="mx-auto max-w-md py-12 text-center">
@@ -166,8 +326,13 @@ export function Abertura() {
       </div>
 
       {/* linha final sangra pela direita, lime virando peri */}
-      <Huge align="right" className={`${XL} ${SPLIT_LIME} -mr-[4vw]`}>
-        {hero.headline[hero.headline.length - 1]}
+      <Huge
+        align="right"
+        fit={hero.headline[hero.headline.length - 1]}
+        bleed={1.06}
+        className={`${SPLIT_LIME} -mr-[3vw]`}
+      >
+        {null}
       </Huge>
     </Beat>
   );
@@ -178,11 +343,18 @@ export function Virada() {
   return (
     <>
       <Beat>
-        <Huge align="left" drift={4} depth={0.12} className={`${LG} -ml-[2vw]`}>
-          {virada.title[0]}
+        <Huge align="left" drift={4} depth={0.12} fit={virada.title[0]} max={7} className="-ml-[2vw]">
+          {null}
         </Huge>
-        <Huge align="right" drift={-4} depth={0.12} className={`${LG} ${SPLIT_LIME} mt-3 -mr-[2vw]`}>
-          {virada.title[1]}
+        <Huge
+          align="right"
+          drift={-4}
+          depth={0.12}
+          fit={virada.title[1]}
+          max={7}
+          className={`${SPLIT_LIME} mt-3 -mr-[2vw]`}
+        >
+          {null}
         </Huge>
         <div className="mx-auto mt-16 max-w-lg text-center">
           <Caption>{virada.lead}</Caption>
@@ -192,14 +364,18 @@ export function Virada() {
       {/* as três ondas, uma por tela */}
       {virada.cards.map((c) => (
         <Beat key={c.title} h="min-h-[85vh]">
-          <Caption className={c.now ? "text-lime" : "text-peri/70"}>{c.period}</Caption>
+          <Caption className={c.now ? "text-lime" : "text-peri/70"}>
+            <Scramble text={c.period} />
+          </Caption>
           <Huge
             align="left"
             drift={c.now ? 3 : 2}
             depth={c.now ? 0.14 : 0.08}
-            className={`${LG} mt-4 ${c.now ? SPLIT_LIME : "text-fg/85"}`}
+            fit={c.title}
+            max={7}
+            className={`mt-4 ${c.now ? SPLIT_LIME : "text-fg/85"}`}
           >
-            {c.title}
+            {null}
           </Huge>
           <div className="mt-8 max-w-md">
             <Caption className="normal-case tracking-[0.06em] text-fg/55">{c.desc}</Caption>
@@ -292,7 +468,7 @@ export function Frentes() {
   return (
     <>
       <Beat h="min-h-[70vh]">
-        <Caption>{frentes.eyebrow}</Caption>
+        <Caption><Scramble text={frentes.eyebrow} /></Caption>
         <Huge align="left" drift={3} className={`${LG} mt-5 whitespace-normal`}>
           {frentes.title}
         </Huge>
@@ -303,7 +479,7 @@ export function Frentes() {
           <div className="flex items-baseline gap-6">
             <span className={`${LG} font-medium text-peri/35`}>{`0${i + 1}`}</span>
             <div>
-              <Caption className="text-lime">{f.tag}</Caption>
+              <Caption className="text-lime"><Scramble text={f.tag} /></Caption>
               <h3 className={`${MD} mt-3 font-medium leading-tight`}>{f.title}</h3>
             </div>
           </div>
@@ -362,7 +538,7 @@ export function Numeros() {
 
       {/* o case */}
       <Beat h="min-h-[85vh]">
-        <Caption className="text-lime">{caseDestaque.eyebrow}</Caption>
+        <Caption className="text-lime"><Scramble text={caseDestaque.eyebrow} /></Caption>
         <Huge align="left" drift={3} className={`${LG} mt-5 whitespace-normal`}>
           {caseDestaque.title}{" "}
           <span className={LIME}>{caseDestaque.titleHighlight}</span>
@@ -385,7 +561,7 @@ export function Fecho() {
   return (
     <>
       <Beat h="min-h-[80vh]">
-        <Caption className="text-lime">{garantiaFinal.eyebrow}</Caption>
+        <Caption className="text-lime"><Scramble text={garantiaFinal.eyebrow} /></Caption>
         <Huge align="left" className={`${LG} mt-5 whitespace-normal`}>
           {garantiaFinal.title[0]}{" "}
           <span className={LIME}>{garantiaFinal.title[1]}</span>
@@ -399,7 +575,7 @@ export function Fecho() {
 
       {/* fechamento: a pergunta ocupa a tela e o CTA é a única coisa clicável */}
       <Beat h="min-h-screen" className="items-center justify-center text-center">
-        <Caption className="text-lime">{finalCta.eyebrow}</Caption>
+        <Caption className="text-lime"><Scramble text={finalCta.eyebrow} /></Caption>
 
         <h2 className={`${LG} mx-auto mt-8 max-w-5xl font-medium leading-[0.95] tracking-[-0.035em]`}>
           {finalCta.title.slice(0, -1).join(" ")}{" "}
@@ -411,15 +587,19 @@ export function Fecho() {
         </div>
 
         {/* pílula sólida: a única coisa opaca da página inteira, por isso puxa o olho */}
-        <a
-          href={WA_URL}
-          target="_blank"
-          rel="noopener"
-          className="group mt-12 inline-flex items-center gap-3 rounded-full bg-lime px-8 py-4 text-[15px] font-semibold text-bg shadow-[0_0_44px_-6px_rgba(191,242,78,.55)] transition hover:shadow-[0_0_64px_-4px_rgba(191,242,78,.8)]"
-        >
-          {finalCta.primary}
-          <span className="transition-transform group-hover:translate-x-1">→</span>
-        </a>
+        <div className="mt-12">
+          <Magnetic>
+            <a
+              href={WA_URL}
+              target="_blank"
+              rel="noopener"
+              className="group inline-flex items-center gap-3 rounded-full bg-lime px-8 py-4 text-[15px] font-semibold text-bg shadow-[0_0_44px_-6px_rgba(191,242,78,.55)] transition hover:shadow-[0_0_64px_-4px_rgba(191,242,78,.8)]"
+            >
+              {finalCta.primary}
+              <span className="transition-transform group-hover:translate-x-1">→</span>
+            </a>
+          </Magnetic>
+        </div>
       </Beat>
     </>
   );

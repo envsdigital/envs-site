@@ -133,9 +133,13 @@ export default function Field() {
 
     // paralaxe de cursor: desloca o ponto de fuga, o que inclina a cena inteira
     let mx = 0, my = 0, tmx = 0, tmy = 0;
+    // posição em pixels, para o halo que acende o terreno sob o ponteiro
+    let px = -9999, py = -9999;
     const onMove = (e: PointerEvent) => {
       tmx = (e.clientX / window.innerWidth) * 2 - 1;
       tmy = (e.clientY / window.innerHeight) * 2 - 1;
+      px = e.clientX;
+      py = e.clientY;
     };
     if (!reduce) window.addEventListener("pointermove", onMove, { passive: true });
 
@@ -246,9 +250,12 @@ export default function Field() {
             const cb = LIME[2] + (PERI[2] - LIME[2]) * m;
 
             if (glow) {
-              const a = fade * fade * (0.07 + hn * 0.2);
+              // perto da câmera os pontos se afastam na tela e cada mancha
+              // vira uma bolha solta; atenua em vez de deixar o blob isolado
+              const near = Math.min(1, 26 / Math.max(1, scale * 26 - 30));
+              const a = fade * fade * (0.07 + hn * 0.2) * near;
               if (a < 0.006) continue;
-              const rad = Math.min(90, Math.max(3, scale * 26));
+              const rad = Math.min(54, Math.max(3, scale * 26));
               c2.fillStyle = `rgba(${Math.round(cr * 0.62)},${Math.round(cg * 0.62)},${Math.round(cb * 0.5)},${a})`;
               c2.fillRect(sx - rad / 2, sy - rad / 2, rad, rad);
             } else {
@@ -256,8 +263,13 @@ export default function Field() {
               const a = fade * fade * (0.2 + hn * 0.8) * (1 + vor * 0.9);
               if (a < 0.012) continue;
               const k = (0.32 + hn * 0.68) * (1 - vor) + vor;
-              const size = Math.min(4.5, Math.max(0.7, scale * 1.7));
-              c2.fillStyle = `rgba(${Math.round(cr * k)},${Math.round(cg * k)},${Math.round(cb * k)},${a})`;
+              // halo do ponteiro: o terreno acende por onde o cursor passa
+              const hd = Math.hypot(sx - px, sy - py);
+              const lit = hd < 210 ? Math.pow(1 - hd / 210, 2) : 0;
+
+              const size = Math.min(4.5, Math.max(0.7, scale * 1.7)) * (1 + lit * 0.9);
+              const kk = Math.min(1, k + lit * 0.8);
+              c2.fillStyle = `rgba(${Math.round(cr * kk)},${Math.round(cg * kk)},${Math.round(cb * kk)},${Math.min(1, a + lit * 0.55)})`;
               c2.fillRect(sx, sy, size, size);
 
               // aberração cromática nas bordas

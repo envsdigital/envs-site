@@ -3,6 +3,7 @@ import { ContentProvider } from "@/components/v3/Content";
 import { defaultContent, type Content } from "@/data/content";
 import Field from "@/components/v4/Field";
 import { Hud } from "@/components/v4/Hud";
+import { Cursor } from "@/components/v4/Cursor";
 import { Abertura, Virada, Diferenca, Frentes, Numeros, Fecho } from "@/components/v4/Beats";
 
 /**
@@ -23,6 +24,7 @@ export default function V4Page({ content = defaultContent }: { content?: Content
         style={{ background: "radial-gradient(ellipse 90% 70% at 50% 45%, rgba(5,5,5,.72), rgba(5,5,5,.28) 70%, transparent)" }}
       />
       <Hud />
+      <Cursor />
       <main
         className="relative z-10"
         style={{ fontFamily: "var(--font-inter), ui-sans-serif, system-ui, sans-serif" }}
