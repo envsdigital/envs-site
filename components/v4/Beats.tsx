@@ -394,17 +394,9 @@ export function Virada() {
         <Huge align="left" drift={4} depth={0.12} fit={virada.title[0]} max={7} className="-ml-[2vw]">
           {null}
         </Huge>
-        <Huge
-          align="right"
-          drift={-4}
-          depth={0.12}
-          fit={virada.title[1]}
-          grad={GRAD}
-          max={7}
-          className="mt-3 -mr-[2vw]"
-        >
-          {null}
-        </Huge>
+        <div className="mt-3">
+          <ParticleText text={virada.title[1]} align="right" max={7} />
+        </div>
         <div className="mx-auto mt-16 max-w-lg text-center">
           <Caption>{virada.lead}</Caption>
         </div>
@@ -460,9 +452,7 @@ export function Diferenca() {
   return (
     <>
       <Beat>
-        <Huge align="center" className={`${LG} mx-auto whitespace-normal text-center`}>
-          {diferenca.title}
-        </Huge>
+        <ParticleText text={diferenca.title} align="center" bleed={0.9} max={5} />
       </Beat>
 
       {/* o contraste vira duas telas seguidas, não duas colunas */}
@@ -573,10 +563,13 @@ export function Numeros() {
   const { stats, caseDestaque } = useContent();
   return (
     <>
-      <Beat h="min-h-[60vh]">
-        <Huge align="center" className={`${LG} mx-auto whitespace-normal text-center`}>
-          {stats.title[0]} <span className={SPLIT_LIME}>{stats.title[1]}</span>
+      <Beat h="min-h-[70vh]">
+        <Huge align="center" className={`${MD} mx-auto whitespace-normal text-center text-fg/70`}>
+          {stats.title[0]}
         </Huge>
+        <div className="mt-6">
+          <ParticleText text={stats.title[1]} align="center" bleed={0.85} max={6} />
+        </div>
       </Beat>
 
       {/* cada número ocupa uma tela inteira e sobe ao entrar */}
@@ -633,6 +626,8 @@ export function Fecho() {
       <Beat h="min-h-screen" className="items-center justify-center text-center">
         <Caption className="text-lime"><Scramble text={finalCta.eyebrow} /></Caption>
 
+        {/* sem partículas aqui: é o fim da página, não há rolagem além
+            deste bloco para o texto se formar na frente do leitor */}
         <h2 className={`${LG} mx-auto mt-8 max-w-5xl font-medium leading-[0.95] tracking-[-0.035em]`}>
           {finalCta.title.slice(0, -1).join(" ")}{" "}
           <span className={SPLIT_LIME}>{finalCta.title[finalCta.title.length - 1]}</span>
