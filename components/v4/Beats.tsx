@@ -360,28 +360,45 @@ const MD = "text-[clamp(1.9rem,min(5.6vw,7vh),4.4rem)]";
 
 export function Abertura() {
   const { hero } = useContent();
-  return (
-    <Beat h="min-h-[130vh]" className="justify-between">
-      {/* linha 1 sangra pela esquerda */}
-      <Huge align="left" fit={hero.headline[0]} bleed={1.06} className="-ml-[3vw]">
-        {null}
-      </Huge>
+  const fim = hero.headline.length - 1;
 
-      <div className="mx-auto max-w-md py-12 text-center">
+  /* A headline é UMA frase quebrada em linhas — "Pare de contratar pessoas /
+     para fazer o que a / IA faz sozinha". Renderizar só a primeira e a última
+     comia o elo e deixava dois fragmentos soltos; a legenda no meio ainda
+     cortava a frase em dois. Agora saem todas as linhas, na ordem, e a
+     legenda vai depois. Primeira e última seguem sangrando por lados
+     opostos, que é o que dá a escala. */
+  return (
+    <Beat h="min-h-screen">
+      {hero.headline.map((linha, i) =>
+        i === 0 ? (
+          <Huge key={linha} align="left" fit={linha} bleed={1.06} className="-ml-[3vw]">
+            {null}
+          </Huge>
+        ) : i === fim ? (
+          // sem partículas aqui: a hero abre na tela e não há rolagem antes
+          // dela para o texto se formar — chegaria pronto e o efeito se perde
+          <Huge
+            key={linha}
+            align="right"
+            fit={linha}
+            grad={GRAD}
+            bleed={1.06}
+            className="-mr-[3vw]"
+          >
+            {null}
+          </Huge>
+        ) : (
+          // o elo: menor e recuado, para ligar as duas sem competir
+          <Huge key={linha} align="left" fit={linha} bleed={0.58} max={5} className="pl-[7vw] text-fg/75">
+            {null}
+          </Huge>
+        )
+      )}
+
+      <div className="mx-auto mt-14 max-w-md text-center">
         <Caption>{hero.sub}</Caption>
       </div>
-
-      {/* Sem partículas aqui: a hero abre na tela e não há rolagem antes
-          dela para o texto se formar — chegaria pronto e o efeito se perde. */}
-      <Huge
-        align="right"
-        fit={hero.headline[hero.headline.length - 1]}
-        grad={GRAD}
-        bleed={1.06}
-        className="-mr-[3vw]"
-      >
-        {null}
-      </Huge>
     </Beat>
   );
 }
