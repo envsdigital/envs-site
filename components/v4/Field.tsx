@@ -202,13 +202,18 @@ export default function Field() {
 
       // suaviza avanço da câmera e resposta do cursor
       /* Câmera com massa: o scroll não move a câmera, puxa ela.
-         A velocidade tem inércia própria, então uma rolagem rápida abre
-         distância e a câmera dispara atrás; parar não freia na hora, ela
-         desacelera. É daí que vem a sensação de navegar, e não de arrastar. */
-      const pull = (targetZ - camZ) * 0.035;
-      vel += (pull - vel) * 0.09;
+         A velocidade tem inércia própria, então rolar abre distância e a
+         câmera dispara atrás; parar não freia na hora, ela desacelera.
+
+         A mola é dura de propósito. Com constantes baixas (0.035/0.09) a
+         câmera pegava velocidade devagar e ainda deslizava ~1.2s depois de
+         soltar o scroll — lê como atraso, não como inércia. Nestas ela
+         assenta em ~0.23s e mal ultrapassa, mas guarda atraso suficiente
+         durante o gesto para a aceleração continuar aparecendo. */
+      const pull = (targetZ - camZ) * 0.18;
+      vel += (pull - vel) * 0.34;
       camZ += vel;
-      const speed = Math.min(1, Math.abs(vel) / 40);
+      const speed = Math.min(1, Math.abs(vel) / 45);
 
       vor += (targetVor - vor) * 0.05;
       mx += (tmx - mx) * 0.045;
