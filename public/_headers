@@ -1,0 +1,20 @@
+# Cabeçalhos aplicados pelo Cloudflare Pages.
+# Este arquivo vive em public/ e o Next o copia para a raiz de out/,
+# que é onde o Pages procura por ele.
+
+# Os bundles do Next levam hash no nome: mudou o conteúdo, mudou a URL.
+# Por isso podem ser guardados para sempre sem risco de servir versão velha.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/logos/*
+  Cache-Control: public, max-age=604800
+
+# O HTML não pode ser guardado: é o que aponta para os bundles novos
+# depois de cada deploy.
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: geolocation=(), microphone=(), camera=()

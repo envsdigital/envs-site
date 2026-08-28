@@ -19,13 +19,15 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://envs.com.br"),
-  title: "envs — Parceiro de Operação com IA",
+  // acompanha a copy que a home renderiza; desalinhar isso faz o Google e o
+  // compartilhamento anunciarem uma página diferente da que abre
+  title: "envs — Software sob medida para empresas",
   description:
-    "Pare de contratar pessoas para fazer o que a IA pode fazer sozinha. Agentes autônomos, desenvolvimento de software e squad plugado na sua empresa.",
+    "Pare de adaptar sua operação ao sistema. A envs constrói o software que a sua empresa realmente usa: sistemas internos, portais, apps e integrações.",
   openGraph: {
-    title: "envs — Parceiro de Operação com IA",
+    title: "envs — Software sob medida para empresas",
     description:
-      "Agentes autônomos que operam seus processos 24h. Financeiro, jurídico, comercial, logística — sem intervenção humana.",
+      "ERP que não fecha, planilha que virou processo, integração que ninguém mantém. A envs constrói o software que a sua empresa realmente usa.",
     url: "https://envs.com.br",
     locale: "pt_BR",
     type: "website",

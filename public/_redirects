@@ -1,0 +1,5 @@
+# Redirects do Cloudflare Pages. Um por linha: origem, destino, código.
+
+# www para o domínio raiz, para o site ter um endereço só.
+# Depende de www.envs.com.br estar adicionado como domínio no projeto Pages.
+https://www.envs.com.br/* https://envs.com.br/:splat 301

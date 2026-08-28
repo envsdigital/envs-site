@@ -1,0 +1,12 @@
+# As rotas de versão existem para comparação interna e repetem a mesma copy
+# da home. Indexá-las dividiria o site em cópias concorrentes na busca.
+User-agent: *
+Disallow: /v1
+Disallow: /v2
+Disallow: /v3
+Disallow: /v3-1
+Disallow: /v4
+Disallow: /v4-1
+Allow: /
+
+Sitemap: https://envs.com.br/sitemap.xml
