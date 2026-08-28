@@ -49,8 +49,44 @@ function fitSize(text: string, bleed = 1, max = 11) {
  * Roda só enquanto está na tela — sem o IntersectionObserver seriam dezenas
  * de laços por frame para texto que ninguém está vendo.
  */
-function Letters({ text, className = "" }: { text: string; className?: string }) {
+function Letters({
+  text,
+  grad,
+  className = "",
+}: {
+  text: string;
+  /** [de, para]: gradiente contínuo ao longo da linha */
+  grad?: [string, string];
+  className?: string;
+}) {
   const ref = useRef<HTMLSpanElement>(null);
+
+  /* O gradiente vai em cada letra, não no bloco.
+     `bg-clip-text` no pai recorta pela forma do texto do próprio elemento e
+     não enxerga os spans por letra — o fundo vaza como mancha na origem.
+     Dando a cada letra a mesma imagem, do tamanho da linha inteira, e
+     deslocando a posição pelo offset dela, o gradiente volta a ser contínuo. */
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !grad) return;
+    const kids = Array.from(el.children) as HTMLElement[];
+
+    const paint = () => {
+      const w = el.offsetWidth;
+      const bl = el.offsetLeft;
+      for (const c of kids) {
+        c.style.backgroundImage = `linear-gradient(90deg, ${grad[0]}, ${grad[1]})`;
+        c.style.backgroundSize = `${w}px 100%`;
+        c.style.backgroundPosition = `${-(c.offsetLeft - bl)}px 0`;
+        c.style.setProperty("background-clip", "text");
+        c.style.setProperty("-webkit-background-clip", "text");
+        c.style.color = "transparent";
+      }
+    };
+    paint();
+    window.addEventListener("resize", paint);
+    return () => window.removeEventListener("resize", paint);
+  }, [text, grad]);
 
   useEffect(() => {
     const el = ref.current;
@@ -94,8 +130,6 @@ function Letters({ text, className = "" }: { text: string; className?: string })
   }, [text]);
 
   return (
-    // sem `relative`: um wrapper posicionado sai da forma de recorte do
-    // `bg-clip-text` do pai e o gradiente vaza como uma mancha na origem
     <span ref={ref} aria-label={text} className={`inline-block ${className}`}>
       {Array.from(text).map((ch, i) => (
         <span
@@ -214,6 +248,7 @@ function Huge({
   drift = 0,
   depth = 0,
   fit,
+  grad,
   bleed = 1,
   max = 11,
   className = "",
@@ -224,6 +259,7 @@ function Huge({
   depth?: number;
   /** frase pura: dimensiona pelo comprimento e anima letra a letra */
   fit?: string;
+  grad?: [string, string];
   bleed?: number;
   max?: number;
   className?: string;
@@ -264,7 +300,7 @@ function Huge({
       // na className não vence — mesma especificidade, ordem do CSS decide.
       className={`${fit ? "whitespace-nowrap" : ""} font-medium leading-[0.88] tracking-[-0.035em] ${a} ${className}`}
     >
-      {fit ? <Letters text={fit} /> : children}
+      {fit ? <Letters text={fit} grad={grad} /> : children}
     </div>
   );
 }
@@ -304,11 +340,11 @@ function Counter({ to, prefix = "", suffix = "" }: { to: number; prefix?: string
   return <span ref={ref}>{prefix}0{suffix}</span>;
 }
 
-/** Texto branco→peri. A cor secundária como segunda voz, não como acento. */
-const SPLIT =
-  "bg-gradient-to-r from-fg via-fg to-peri bg-clip-text text-transparent";
+/** A cor secundária como segunda voz, não como acento. */
 const SPLIT_LIME =
   "bg-gradient-to-r from-lime via-lime to-peri bg-clip-text text-transparent";
+/** mesmo par, para as linhas que usam `fit` e pintam letra a letra */
+const GRAD: [string, string] = ["#bff24e", "#908aff"];
 
 const LIME = "text-lime";
 /* dimensões que sangram: o texto é maior que a viewport de propósito.
@@ -335,12 +371,17 @@ export function Abertura() {
         <Caption>{hero.sub}</Caption>
       </div>
 
-      {/* linha final: monta de partículas, lime virando peri */}
-      <ParticleText
-        text={hero.headline[hero.headline.length - 1]}
+      {/* Sem partículas aqui: a hero abre na tela e não há rolagem antes
+          dela para o texto se formar — chegaria pronto e o efeito se perde. */}
+      <Huge
         align="right"
-        bleed={1.02}
-      />
+        fit={hero.headline[hero.headline.length - 1]}
+        grad={GRAD}
+        bleed={1.06}
+        className="-mr-[3vw]"
+      >
+        {null}
+      </Huge>
     </Beat>
   );
 }
@@ -353,16 +394,14 @@ export function Virada() {
         <Huge align="left" drift={4} depth={0.12} fit={virada.title[0]} max={7} className="-ml-[2vw]">
           {null}
         </Huge>
-        {/* cor sólida, não gradiente: `bg-clip-text` recorta pela forma do
-            texto do próprio elemento e não lida com os spans por letra do
-            `fit` — o fundo vaza como uma mancha na origem do bloco. */}
         <Huge
           align="right"
           drift={-4}
           depth={0.12}
           fit={virada.title[1]}
+          grad={GRAD}
           max={7}
-          className="mt-3 -mr-[2vw] text-peri"
+          className="mt-3 -mr-[2vw]"
         >
           {null}
         </Huge>

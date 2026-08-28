@@ -116,14 +116,15 @@ export function ParticleText({
 
       /* fator de formação, tirado da posição do bloco na viewport:
          entra por baixo → 0, formado no miolo, desfeito ao sair por cima.
-         O platô importa: sem ele a frase só fica legível no centro exato
-         e o leitor nunca chega a lê-la inteira. */
+         O platô é largo de propósito — cobre de 18% a 82% da altura da
+         tela. Com uma faixa estreita a frase só ficava legível no ponto
+         exato da rolagem, e ninguém consegue parar ali. */
       const r = host.getBoundingClientRect();
       const v = (r.top + r.height / 2) / window.innerHeight;
       const off = Math.abs(v - 0.5);
       const form = reduce
         ? 1
-        : 1 - Math.min(1, Math.max(0, (off - 0.14) / 0.24));
+        : 1 - Math.min(1, Math.max(0, (off - 0.32) / 0.16));
 
       const t = performance.now() / 1000;
       ctx.clearRect(0, 0, W, H);
