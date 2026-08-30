@@ -7,6 +7,9 @@ Disallow: /v3
 Disallow: /v3-1
 Disallow: /v4
 Disallow: /v4-1
+# /w é um link curto de agendamento, mandado direto para quem já fala com a
+# gente. Não tem copy própria para ranquear.
+Disallow: /w
 Allow: /
 
 Sitemap: https://envs.com.br/sitemap.xml
