@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { WA_URL } from "@/data/site";
 import CalEmbed from "@/components/CalEmbed";
+import Aurora from "@/components/v3/Aurora";
 
 export const metadata: Metadata = {
   title: "envs | Agendar conversa",
@@ -20,14 +21,48 @@ const pontos = [
 export default function Page() {
   return (
     <main
-      className="min-h-screen"
+      className="relative min-h-screen overflow-hidden"
       style={{
         fontFamily: "var(--font-inter), ui-sans-serif, system-ui, sans-serif",
       }}
     >
       <div className="grain" />
 
-      <header className="px-5 py-5">
+      {/* Mesma aurora do fecho da LP (components/v3/Body.tsx): sem planeta,
+          luz nascendo de baixo e dissolvendo no topo. Fica só atrás do
+          cabeçalho e do texto — o embed é um iframe opaco, então a luz
+          morreria num corte reto se passasse por baixo dele. Terminando
+          acima, ela emoldura a entrada do calendário. */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-[62vh] min-h-[420px]"
+        style={{
+          // dissolve a base. Na LP a aurora fica na última seção e o corte de
+          // baixo cai no rodapé; aqui ela termina no meio da página, então sem
+          // esse fade sobra uma linha reta atravessando a tela dos dois lados
+          // do calendário.
+          maskImage: "linear-gradient(to bottom, #000 62%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, #000 62%, transparent 100%)",
+        }}
+      >
+        <Aurora
+          junction={0.62}
+          // mais alto que os 0.96 da LP: lá a luz nasce rente à borda de baixo
+          // da seção; aqui ela precisa caber inteira dentro do bloco de texto
+          horizonAt={0.58}
+          intensity={0.9}
+          planet={false}
+          fadeTop={0.42}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 44% 40% at 50% 38%, rgba(13,13,13,0.7), transparent 74%)",
+          }}
+        />
+      </div>
+
+      <header className="relative px-5 py-5">
         <div className="mx-auto flex max-w-[1240px] items-center justify-between">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <a href="/" aria-label="envs">
@@ -48,7 +83,7 @@ export default function Page() {
         </div>
       </header>
 
-      <section className="mx-auto max-w-[1240px] px-5 pb-20 pt-8">
+      <section className="relative mx-auto max-w-[1240px] px-5 pb-20 pt-8">
         <div className="flex items-center gap-3">
           <span className="flex h-1.5 w-1.5 rounded-full bg-lime" />
           <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg/45">
