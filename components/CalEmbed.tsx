@@ -66,7 +66,11 @@ export default function CalEmbed() {
     window.Cal("init", CAL_NAMESPACE, { origin: CAL_ORIGIN });
     window.Cal.ns[CAL_NAMESPACE]("inline", {
       elementOrSelector: "#my-cal-inline-20min",
-      config: { layout: "month_view", theme: "dark" },
+      // whatsapp: "+55" pré-preenche o DDI do campo de telefone com o Brasil.
+      // Sem isso o Cal cai no +1 (a detecção por IP não roda no self-hosted).
+      // A chave é o identificador da pergunta no event type; o embed repassa
+      // como querystring pro iframe, igual a ?whatsapp=+55 na URL da agenda.
+      config: { layout: "month_view", theme: "dark", whatsapp: "+55" },
       calLink: CAL_LINK,
     });
     window.Cal.ns[CAL_NAMESPACE]("ui", {
