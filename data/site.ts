@@ -3,6 +3,10 @@
 export const WA_URL =
   "https://wa.me/5588981697614?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20envs%20e%20quero%20automatizar%20meus%20processos%20com%20IA.";
 
+// Agenda da envs: a plataforma SysEnvs (página /agendar/<AGENDA_SLUG>, incorporada pelo AgendaEmbed na /w).
+export const AGENDA_ORIGIN = process.env.NEXT_PUBLIC_AGENDA_ORIGIN ?? "https://sysenvs.vercel.app";
+export const AGENDA_SLUG = process.env.NEXT_PUBLIC_AGENDA_SLUG ?? "conversa-inicial";
+
 export const hero = {
   eyebrow: "AUTOMAÇÃO INTELIGENTE PARA EMPRESAS QUE QUEREM CRESCER",
   // última linha em verde

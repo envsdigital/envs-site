@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
 import { WA_URL } from "@/data/site";
-import CalEmbed from "@/components/CalEmbed";
+import AgendaEmbed from "@/components/AgendaEmbed";
 import Aurora from "@/components/v3/Aurora";
 
 export const metadata: Metadata = {
   title: "envs | Agendar conversa",
   description:
-    "20 minutos para entender sua operação e mostrar onde a tecnologia gera resultado. Escolha o melhor horário na agenda.",
+    "30 minutos para entender sua operação e mostrar onde a tecnologia gera resultado. Escolha o melhor horário na agenda.",
   // página de link curto, para mandar direto para quem já está falando com a
   // gente. Não deve competir com a home na busca.
   robots: { index: false, follow: false },
 };
 
 const pontos = [
-  "20 minutos, por Google Meet",
+  "30 minutos, por Google Meet",
   "Sem compromisso e sem apresentação comercial",
   "Você sai com o próximo passo definido",
 ];
@@ -113,15 +113,10 @@ export default function Page() {
           ))}
         </ul>
 
-        {/* Agenda própria (Cal.com self-hosted em agenda.envs.com.br) — sem
-            selo de terceiro, tema escuro e cor da marca combinando com o
-            resto do site. Sem container/borda por fora: o próprio widget já
-            é escuro e fecha com o fundo da página; uma caixa ao redor só
-            duplicava a moldura. Ver components/CalEmbed.tsx — o componente
-            escolhe o layout certo (mês ou mobile) conforme a largura da
-            tela. */}
+        {/* Agenda própria da envs (plataforma SysEnvs, em modo inline e tema escuro). Sem container/borda por fora: a
+            própria página incorporada já usa o tema escuro e fecha com o fundo do site. Ver components/AgendaEmbed.tsx. */}
         <div className="mt-10">
-          <CalEmbed />
+          <AgendaEmbed />
         </div>
 
         <p className="mt-8 text-[13px] text-fg/40">
