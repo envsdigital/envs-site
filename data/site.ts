@@ -8,8 +8,9 @@ export const AGENDA_ORIGIN = process.env.NEXT_PUBLIC_AGENDA_ORIGIN ?? "https://s
 export const AGENDA_SLUG = process.env.NEXT_PUBLIC_AGENDA_SLUG ?? "conversa-inicial";
 
 // Chatbot de qualificação da envs: o fluxo publicado na plataforma SysEnvs (página /chat/<CHAT_SLUG>), aberto em popup pelo
-// botão "Quero meu sistema sob medida". Sem NEXT_PUBLIC_CHAT_SLUG o botão segue levando ao WhatsApp, como antes.
-export const CHAT_SLUG = process.env.NEXT_PUBLIC_CHAT_SLUG ?? "";
+// botão "Quero meu sistema sob medida". O fluxo "Sistema sob medida" (nome, e-mail, WhatsApp, o que quer construir e Agendar)
+// está publicado na plataforma. NEXT_PUBLIC_CHAT_SLUG troca o endereço; vazio ("") desliga o chat e o botão volta ao WhatsApp.
+export const CHAT_SLUG = process.env.NEXT_PUBLIC_CHAT_SLUG ?? "sistema-sob-medida";
 
 export const hero = {
   eyebrow: "AUTOMAÇÃO INTELIGENTE PARA EMPRESAS QUE QUEREM CRESCER",
