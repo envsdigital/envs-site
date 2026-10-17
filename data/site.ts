@@ -7,6 +7,10 @@ export const WA_URL =
 export const AGENDA_ORIGIN = process.env.NEXT_PUBLIC_AGENDA_ORIGIN ?? "https://sysenvs.vercel.app";
 export const AGENDA_SLUG = process.env.NEXT_PUBLIC_AGENDA_SLUG ?? "conversa-inicial";
 
+// Chatbot de qualificação da envs: o fluxo publicado na plataforma SysEnvs (página /chat/<CHAT_SLUG>), aberto em popup pelo
+// botão "Quero meu sistema sob medida". Sem NEXT_PUBLIC_CHAT_SLUG o botão segue levando ao WhatsApp, como antes.
+export const CHAT_SLUG = process.env.NEXT_PUBLIC_CHAT_SLUG ?? "";
+
 export const hero = {
   eyebrow: "AUTOMAÇÃO INTELIGENTE PARA EMPRESAS QUE QUEREM CRESCER",
   // última linha em verde

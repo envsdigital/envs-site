@@ -1,4 +1,5 @@
 import { SmoothScroll, Cursor } from "@/components/Chrome";
+import ChatEmbed from "@/components/ChatEmbed";
 import Hero from "@/components/v3/Hero";
 import Spotlight from "@/components/v3/Spotlight";
 import { ContentProvider } from "@/components/v3/Content";
@@ -14,6 +15,7 @@ export default function V3Page({ content = defaultContent }: { content?: Content
   return (
     <ContentProvider value={content}>
       <main style={{ fontFamily: "var(--font-inter), ui-sans-serif, system-ui, sans-serif" }}>
+        <ChatEmbed />
         <SmoothScroll />
         <Cursor />
         <Spotlight />

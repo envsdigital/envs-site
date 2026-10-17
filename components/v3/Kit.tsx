@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/anim";
+import { CHAT_SLUG } from "@/data/site";
 import { useContent } from "./Content";
 
 /* ---------- primitivos da linguagem v3 ---------- */
@@ -10,10 +11,13 @@ export function Glossy({
   children,
   href,
   className = "",
+  chat = false,
 }: {
   children: React.ReactNode;
   href?: string;
   className?: string;
+  /** Abre o chatbot da envs em popup (embed.js, via data-sysenvs-open). O href continua como reserva se o script não carregar. */
+  chat?: boolean;
 }) {
   // sem href explícito, cai no WhatsApp da variante ativa
   const { WA_URL } = useContent();
@@ -24,6 +28,7 @@ export function Glossy({
       href={to}
       target={ext ? "_blank" : undefined}
       rel={ext ? "noopener" : undefined}
+      {...(chat && CHAT_SLUG ? { "data-sysenvs-open": "" } : {})}
       className={`glossy inline-flex items-center gap-2.5 px-7 py-3.5 text-[15px] font-medium text-fg ${className}`}
     >
       {children}

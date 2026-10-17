@@ -164,7 +164,7 @@ export default function Hero() {
           className="hero-in mt-10 flex flex-wrap items-center justify-center gap-3"
           style={{ animationDelay: "0.88s" }}
         >
-          <Glossy>
+          <Glossy chat>
             {hero.cta}
             <span>→</span>
           </Glossy>
