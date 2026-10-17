@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { CHAT_SLUG } from "@/data/site";
 import { useContent } from "./Content";
 import { Glossy, Ghost, Pill } from "./Kit";
 import Aurora from "./Aurora";
@@ -34,6 +35,7 @@ function Nav() {
           href={WA_URL}
           target="_blank"
           rel="noopener"
+          {...(CHAT_SLUG ? { "data-sysenvs-open": "" } : {})} // abre o chatbot em popup; o WhatsApp fica de reserva
           className="glossy px-5 py-2.5 text-[13.5px] font-medium text-fg"
         >
           Agendar call

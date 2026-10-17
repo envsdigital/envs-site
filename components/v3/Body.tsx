@@ -550,7 +550,7 @@ export function Fecho() {
           </h2>
           <p className="mx-auto mt-7 max-w-lg text-[15px] leading-relaxed text-fg/55">{finalCta.lead}</p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <Glossy>{finalCta.primary} <span>→</span></Glossy>
+            <Glossy chat>{finalCta.primary} <span>→</span></Glossy>
             <Ghost href="#virada">{finalCta.secondary}</Ghost>
           </div>
           <p className="mx-auto mt-24 max-w-2xl text-[13px] leading-relaxed text-fg/40">
