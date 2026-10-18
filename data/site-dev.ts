@@ -196,9 +196,9 @@ export const devContent: Content = {
       desc: "Baseado na metodologia da Intel: identificamos o maior gargalo e resolvemos antes de avançar. Sem retrabalho.",
     },
     garantia: {
-      tag: "GARANTIA",
-      title: "Resultado ou devolução.",
-      desc: "Quem tem skin in the game não precisa de contrato para levar seu negócio a sério.",
+      tag: "CONTROLE",
+      title: "Você aprova cada etapa.",
+      desc: "Escopo combinado por escrito, entregas em etapas e código seu. Você acompanha tudo e decide o próximo passo.",
     },
   },
 
@@ -410,10 +410,7 @@ export const devContent: Content = {
     lead: "Devs, designers, gestores e especialistas em produto. Todos sob o mesmo teto, focados na sua operação.",
   },
 
-  garantiaFinal: {
-    ...defaultContent.garantiaFinal,
-    title: ["O risco é nosso tanto quanto é seu.", "Resultado ou devolução."],
-  },
+  garantiaFinal: defaultContent.garantiaFinal,
 
   finalCta: {
     eyebrow: "PRONTO PARA SAIR DA PLANILHA?",

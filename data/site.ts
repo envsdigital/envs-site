@@ -175,9 +175,9 @@ export const frentes = {
     desc: "Baseado na metodologia da Intel: identificamos o maior gargalo e resolvemos antes de avançar. Sem retrabalho.",
   },
   garantia: {
-    tag: "GARANTIA",
-    title: "Resultado ou devolução.",
-    desc: "Quem tem skin in the game não precisa de contrato para levar seu negócio a sério.",
+    tag: "CONTROLE",
+    title: "Você aprova cada etapa.",
+    desc: "Escopo combinado por escrito, entregas em etapas e código seu. Você acompanha tudo e decide o próximo passo.",
   },
 };
 
@@ -382,10 +382,10 @@ export const escritorio = {
 };
 
 export const garantiaFinal = {
-  eyebrow: "NOSSA GARANTIA",
-  title: ["O risco é nosso tanto quanto é seu.", "Resultado ou devolução. Simples assim."],
-  body: "Contratar errado no mercado de tech não é só perder dinheiro. É perder tempo, e no mundo dos negócios tempo perdido é mercado que o seu concorrente tomou. Se em qualquer etapa você sentir que não estamos entregando o que prometemos, corrigimos o rumo ou devolvemos seu investimento. Sem burocracia. Sem letras miúdas.",
-  quote: "Quem tem skin in the game não precisa de contrato para levar seu negócio a sério.",
+  eyebrow: "SEGURANÇA PARA CONTRATAR",
+  title: ["Você aprova cada etapa.", "Você decide se continua."],
+  body: "Contratar errado no mercado de tech não é só perder dinheiro. É perder tempo, e no mundo dos negócios tempo perdido é mercado que o seu concorrente tomou. Por isso combinamos o escopo por escrito antes de começar e entregamos em etapas, cada uma com demonstração do software funcionando. Você aprova uma etapa antes de a próxima começar e pode parar ao fim de qualquer uma, ficando com o que foi entregue. Código, documentação e acessos são seus. Sem amarras.",
+  quote: "Você acompanha cada passo e decide o próximo.",
 };
 
 export const finalCta = {

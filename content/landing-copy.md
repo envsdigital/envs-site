@@ -139,7 +139,7 @@ link do WhatsApp, com `target="_blank" rel="noopener"`.
 - **FRENTE 03 — Squad Plugado na Empresa**: Time completo integrado à sua operação. Sem CLT, sem headache, sem sumiço.
   - Chips: Frontend · Backend · UX/UI · Tech Lead — **[[55%]] ↓ custo**
 - **MÉTODO ENVS — Etapa limitante primeiro. Sempre.**: Baseado na metodologia da Intel: identificamos o maior gargalo e resolvemos antes de avançar. Sem retrabalho.
-- **GARANTIA — Resultado ou devolução.**: Quem tem skin in the game não precisa de contrato para levar seu negócio a sério.
+- **CONTROLE — Você aprova cada etapa.**: Escopo combinado por escrito, entregas em etapas e código seu. Você acompanha tudo e decide o próximo passo.
 
 ### POR QUE EMPRESAS FICAM PARA TRÁS
 - Título: A empresa que vai ficar para trás tem exatamente esse perfil:
@@ -282,9 +282,10 @@ respostas resolvem a seção e ficam melhores que qualquer texto meu.
 - Título: O time que vai operar a tecnologia do seu negócio.
 - Lead: Devs, designers, gestores e especialistas em IA. Todos sob o mesmo teto, focados na sua operação.
 
-### GARANTIA (bloco final antes do CTA)
-- Título: O risco é nosso tanto quanto é seu. Resultado ou devolução. Simples assim.
-- Corpo: Contratar errado no mercado de tech não é só perder dinheiro. É perder tempo — e no mundo dos negócios, tempo perdido é mercado que o seu concorrente tomou. Se em qualquer etapa você sentir que não estamos entregando o que prometemos, corrigimos o rumo ou devolvemos seu investimento. Sem burocracia. Sem letras miúdas. Quem tem skin in the game não precisa de contrato para levar seu negócio a sério.
+### SEGURANÇA PARA CONTRATAR (bloco final antes do CTA)
+- Eyebrow: SEGURANÇA PARA CONTRATAR
+- Título: Você aprova cada etapa. Você decide se continua.
+- Corpo: Contratar errado no mercado de tech não é só perder dinheiro. É perder tempo, e no mundo dos negócios tempo perdido é mercado que o seu concorrente tomou. Por isso combinamos o escopo por escrito antes de começar e entregamos em etapas, cada uma com demonstração do software funcionando. Você aprova uma etapa antes de a próxima começar e pode parar ao fim de qualquer uma, ficando com o que foi entregue. Código, documentação e acessos são seus. Sem amarras. Você acompanha cada passo e decide o próximo.
 
 ### CTA FINAL
 - Eyebrow: PRONTO PARA NÃO FICAR PARA TRÁS?

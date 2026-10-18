@@ -110,8 +110,8 @@ export default function Prova() {
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-lime">{garantiaFinal.eyebrow}</p>
             <h2 className="display mt-4 text-[clamp(1.7rem,3.4vw,2.6rem)]">
-              O risco é nosso tanto quanto é seu.{" "}
-              <span className="text-lime">Resultado ou devolução.</span>
+              {garantiaFinal.title[0]}{" "}
+              <span className="text-lime">{garantiaFinal.title[1]}</span>
             </h2>
           </div>
           <div className="lg:pt-2">
