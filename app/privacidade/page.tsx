@@ -16,11 +16,11 @@ const EMPRESA = {
   razaoSocial: "",
   cnpj: "",
   endereco: "",
-  email: "contato@envs.com.br",
+  email: "privacidade@envs.com.br",
   encarregado: "",
 };
 
-const VERSAO = "1.1";
+const VERSAO = "1.2";
 const ATUALIZADA_EM = "17 de outubro de 2026";
 
 function Secao({ n, titulo, children }: { n: number; titulo: string; children: ReactNode }) {
