@@ -175,9 +175,9 @@ export const frentes = {
     desc: "Baseado na metodologia da Intel: identificamos o maior gargalo e resolvemos antes de avançar. Sem retrabalho.",
   },
   garantia: {
-    tag: "CONTROLE",
-    title: "Você aprova cada etapa.",
-    desc: "Escopo combinado por escrito, entregas em etapas e código seu. Você acompanha tudo e decide o próximo passo.",
+    tag: "TRANSPARÊNCIA",
+    title: "Sem surpresa no caminho.",
+    desc: "Alinhamos o escopo antes de começar, mostramos o software funcionando em demonstrações frequentes e conversamos antes de qualquer mudança de custo ou prazo.",
   },
 };
 
@@ -382,10 +382,10 @@ export const escritorio = {
 };
 
 export const garantiaFinal = {
-  eyebrow: "SEGURANÇA PARA CONTRATAR",
-  title: ["Você aprova cada etapa.", "Você decide se continua."],
-  body: "Contratar errado no mercado de tech não é só perder dinheiro. É perder tempo, e no mundo dos negócios tempo perdido é mercado que o seu concorrente tomou. Por isso combinamos o escopo por escrito antes de começar e entregamos em etapas, cada uma com demonstração do software funcionando. Você aprova uma etapa antes de a próxima começar e pode parar ao fim de qualquer uma, ficando com o que foi entregue. Código, documentação e acessos são seus. Sem amarras.",
-  quote: "Você acompanha cada passo e decide o próximo.",
+  eyebrow: "COMO TRABALHAMOS",
+  title: ["Sem surpresa no caminho.", "Você sabe onde estamos o tempo todo."],
+  body: "Contratar errado no mercado de tech não é só perder dinheiro. É perder tempo, e no mundo dos negócios tempo perdido é mercado que o seu concorrente tomou. Por isso começamos alinhando o que será feito, para quem e com quais prioridades. Durante o projeto, você vê o software funcionando em demonstrações frequentes e acompanha o andamento num canal direto com a nossa equipe. Se algo mudar no caminho, conversamos antes de isso virar custo ou prazo.",
+  quote: "Clareza antes, transparência durante.",
 };
 
 export const finalCta = {

@@ -196,9 +196,9 @@ export const devContent: Content = {
       desc: "Baseado na metodologia da Intel: identificamos o maior gargalo e resolvemos antes de avançar. Sem retrabalho.",
     },
     garantia: {
-      tag: "CONTROLE",
-      title: "Você aprova cada etapa.",
-      desc: "Escopo combinado por escrito, entregas em etapas e código seu. Você acompanha tudo e decide o próximo passo.",
+      tag: "TRANSPARÊNCIA",
+      title: "Sem surpresa no caminho.",
+      desc: "Alinhamos o escopo antes de começar, mostramos o software funcionando em demonstrações frequentes e conversamos antes de qualquer mudança de custo ou prazo.",
     },
   },
 
