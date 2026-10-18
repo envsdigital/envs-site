@@ -20,7 +20,7 @@ const EMPRESA = {
   encarregado: "",
 };
 
-const VERSAO = "1.0";
+const VERSAO = "1.1";
 const ATUALIZADA_EM = "17 de outubro de 2026";
 
 function Secao({ n, titulo, children }: { n: number; titulo: string; children: ReactNode }) {
@@ -249,8 +249,9 @@ export default function Privacidade() {
                 E-mails de confirmação e lembrete e os registros de envio já encerrados são apagados depois de <B>90 dias</B>.
               </>,
               <>
-                Dados de contato, conversas concluídas e reuniões ficam enquanto houver uma relação comercial ou interesse legítimo em manter o
-                contato, ou até você pedir a eliminação. Dados que a lei obrigue a guardar ficam pelo prazo legal.
+                Contatos que ficam <B>24 meses sem nenhum movimento</B> (sem conversa, reunião ou atendimento em andamento) são apagados
+                automaticamente, com todos os dados deles, depois de um aviso à nossa equipe. Quem se torna cliente tem os dados mantidos enquanto durar
+                o contrato e pelos prazos que a lei exigir. Você pode pedir a eliminação antes disso, a qualquer momento.
               </>,
               <>
                 Cópias de segurança mantidas pelos provedores expiram conforme a política de cada um.
