@@ -16,21 +16,24 @@ export function Glossy({
   children: React.ReactNode;
   href?: string;
   className?: string;
-  /** Abre o chatbot da envs em popup (embed.js, via data-sysenvs-open). O href continua como reserva se o script não carregar. */
+  /** Abre o chatbot da envs em popup (embed.js, via data-sysenvs-open). Com o chat ligado vira <button>; sem CHAT_SLUG segue como link do WhatsApp. */
   chat?: boolean;
 }) {
   // sem href explícito, cai no WhatsApp da variante ativa
   const { WA_URL } = useContent();
+  const cls = `glossy inline-flex items-center gap-2.5 px-7 py-3.5 text-[15px] font-medium text-fg ${className}`;
+  // com o chat ligado não é link (sem endereço no canto da tela ao passar o mouse); o embed.js abre o popup no clique
+  if (chat && CHAT_SLUG) {
+    return (
+      <button type="button" data-sysenvs-open="" className={`${cls} cursor-pointer`}>
+        {children}
+      </button>
+    );
+  }
   const to = href ?? WA_URL;
   const ext = to.startsWith("http");
   return (
-    <a
-      href={to}
-      target={ext ? "_blank" : undefined}
-      rel={ext ? "noopener" : undefined}
-      {...(chat && CHAT_SLUG ? { "data-sysenvs-open": "" } : {})}
-      className={`glossy inline-flex items-center gap-2.5 px-7 py-3.5 text-[15px] font-medium text-fg ${className}`}
-    >
+    <a href={to} target={ext ? "_blank" : undefined} rel={ext ? "noopener" : undefined} className={cls}>
       {children}
     </a>
   );

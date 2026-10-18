@@ -31,15 +31,25 @@ function Nav() {
           ))}
         </nav>
 
-        <a
-          href={WA_URL}
-          target="_blank"
-          rel="noopener"
-          {...(CHAT_SLUG ? { "data-sysenvs-open": "" } : {})} // abre o chatbot em popup; o WhatsApp fica de reserva
-          className="glossy px-5 py-2.5 text-[13.5px] font-medium text-fg"
-        >
-          Agendar call
-        </a>
+        {CHAT_SLUG ? (
+          // abre o chatbot em popup (embed.js); botão, não link, para não mostrar endereço ao passar o mouse
+          <button
+            type="button"
+            data-sysenvs-open=""
+            className="glossy cursor-pointer px-5 py-2.5 text-[13.5px] font-medium text-fg"
+          >
+            Agendar call
+          </button>
+        ) : (
+          <a
+            href={WA_URL}
+            target="_blank"
+            rel="noopener"
+            className="glossy px-5 py-2.5 text-[13.5px] font-medium text-fg"
+          >
+            Agendar call
+          </a>
+        )}
       </div>
     </header>
   );
