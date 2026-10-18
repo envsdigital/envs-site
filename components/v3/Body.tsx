@@ -564,9 +564,14 @@ export function Fecho() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logos/envs-wordmark.svg" alt="envs" className="h-4 w-auto opacity-70" />
           <p className="font-mono text-[10px] text-fg/30">{finalCta.footer}</p>
-          <a href="https://envs.com.br" className="font-mono text-[10px] text-fg/30 hover:text-lime">
-            {finalCta.domain}
-          </a>
+          <div className="flex items-center gap-5">
+            <a href="/privacidade" className="font-mono text-[10px] text-fg/30 hover:text-lime">
+              Privacidade
+            </a>
+            <a href="https://envs.com.br" className="font-mono text-[10px] text-fg/30 hover:text-lime">
+              {finalCta.domain}
+            </a>
+          </div>
         </div>
       </footer>
     </>
