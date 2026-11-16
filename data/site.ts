@@ -3,11 +3,11 @@
 export const WA_URL =
   "https://wa.me/5588981697614?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20envs%20e%20quero%20automatizar%20meus%20processos%20com%20IA.";
 
-// Agenda da envs: a plataforma SysEnvs (página /agendar/<AGENDA_SLUG>, incorporada pelo AgendaEmbed na /w).
-export const AGENDA_ORIGIN = process.env.NEXT_PUBLIC_AGENDA_ORIGIN ?? "https://sysenvs.vercel.app";
+// Agenda da envs: a plataforma Esteira (app.envs.com.br; página /agendar/<AGENDA_SLUG>, incorporada pelo AgendaEmbed na /w).
+export const AGENDA_ORIGIN = process.env.NEXT_PUBLIC_AGENDA_ORIGIN ?? "https://app.envs.com.br";
 export const AGENDA_SLUG = process.env.NEXT_PUBLIC_AGENDA_SLUG ?? "conversa-inicial";
 
-// Chatbot de qualificação da envs: o fluxo publicado na plataforma SysEnvs (página /chat/<CHAT_SLUG>), aberto em popup pelo
+// Chatbot de qualificação da envs: o fluxo publicado na plataforma Esteira (página /chat/<CHAT_SLUG>), aberto em popup pelo
 // botão "Quero meu sistema sob medida". O fluxo "Sistema sob medida" (nome, e-mail, WhatsApp, o que quer construir e Agendar)
 // está publicado na plataforma. NEXT_PUBLIC_CHAT_SLUG troca o endereço; vazio ("") desliga o chat e o botão volta ao WhatsApp.
 export const CHAT_SLUG = process.env.NEXT_PUBLIC_CHAT_SLUG ?? "sistema-sob-medida";
