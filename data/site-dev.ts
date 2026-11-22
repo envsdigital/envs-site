@@ -474,7 +474,7 @@ export const devContent: Content = {
   orbLabels: ["Sistemas internos", "Portais", "Apps", "Integrações"],
 
   statement: {
-    lead: "A envs constrói",
+    lead: "A envs é uma software house que constrói",
     highlight: "o software que a sua operação precisava",
     rest: "e integra o que você já usa, substitui a planilha crítica e continua evoluindo enquanto o negócio cresce.",
   },

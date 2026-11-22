@@ -1,0 +1,28 @@
+# envs
+
+> A envs (envs Software, envs.com.br) é uma software house brasileira. Faz desenvolvimento de software sob medida e sob demanda para empresas: sistemas internos, portais do cliente, aplicativos mobile, integrações entre sistemas, dashboards e produtos digitais. Atende empresas em todo o Brasil, em português.
+
+A envs não vende sistema de prateleira. Constrói o software a partir do processo real de cada cliente, coloca no ar e continua evoluindo depois da entrega. Não é fábrica de software que entrega e some, nem freelancer.
+
+## O que a envs faz
+
+- Software sob medida (sob demanda): sistemas internos (ERP que cabe na operação), portais do cliente, apps mobile para iOS e Android, dashboards e produtos digitais, incluindo micro-SaaS.
+- Integrações e automação: ERP, CRM, banco de dados, sistemas fiscais (NF-e), planilhas, e-mail e APIs conversando, sem digitação dupla. Inclui automação de processos e agentes de IA aplicados à operação.
+- Squad de tecnologia dedicado: time com frontend, backend, UX/UI e tech lead integrado à operação do cliente, sem contratação CLT.
+
+## Como trabalha
+
+- Método envs: identifica a etapa limitante da operação (o maior gargalo) e constrói primeiro o software que a resolve, no menor escopo que já traz resultado.
+- Fluxo: mapeia o processo, prototipa, constrói e evolui. Escopo alinhado antes de começar; demonstrações frequentes do software funcionando.
+- Proposta de MVP no ar em semanas. O prazo exato depende do escopo e é combinado na conversa inicial.
+
+## Quando faz sentido
+
+Quando o sistema pronto resolve cerca de 70% e o resto vira gambiarra: processo crítico em planilha, a mesma informação digitada em vários lugares, relatórios montados à mão, ou a resposta "o sistema não faz isso".
+
+## Contato
+
+- Site: https://envs.com.br
+- Primeiro passo: call gratuita de 30 minutos, sem compromisso, agendada pelo site.
+- WhatsApp: +55 88 98169-7614
+- Privacidade (LGPD): https://envs.com.br/privacidade

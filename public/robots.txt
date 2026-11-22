@@ -12,4 +12,6 @@ Disallow: /v4-1
 Disallow: /w
 Allow: /
 
+# Nenhum bloqueio por robô de IA aqui: o `Allow: /` acima vale para todos. Resumo para IAs em /llms.txt.
+
 Sitemap: https://envs.com.br/sitemap.xml
